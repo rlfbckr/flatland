@@ -1,0 +1,9 @@
+{
+ "machines":[
+    {name: 'mymachineA', location: 'machineA.html'},
+    {name: 'mymachineB', location: 'machineB.html'}
+    {name: 'mymachineC', location: 'machineC.html'}
+
+ ]
+
+}

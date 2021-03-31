@@ -1,0 +1,28 @@
+{
+  "name": "screenmachines",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rlfbckr/screenmachines.git"
+  },
+  "author": "Ralf Baecker",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rlfbckr/screenmachines/issues"
+  },
+  "homepage": "https://github.com/rlfbckr/screenmachines#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "ip": "^1.1.5",
+    "socket.io": "^3.1.2"
+  }
+}

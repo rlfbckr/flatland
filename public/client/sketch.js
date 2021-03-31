@@ -4,7 +4,7 @@ let flatland;
 
 var flatlandConfig = {
  // server: "http://localhost:3000",
-  server: "http://flatland.rlfbckr.io:3000/",
+  server: "http://flatland.earth",
   land: 'default',
   debug: true,
   clearscreen: true,

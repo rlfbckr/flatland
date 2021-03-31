@@ -1,19 +1,21 @@
 /*
- F-L-A-T-L-A-N-D S-E-R-V-E-R
-Ralf Baecker 2021
+   F-L-A-T-L-A-N-D S-E-R-V-E-R
+   Ralf Baecker 2021
 
-platform collaborative generative practices
+   platform collaborative generative practices
 
 */
 const https = require('https');
-var express = require('express');
+const fs = require('fs');
 var ip = require("ip");
 console.log("FLATLAND server !");
 console.log("serverIP : " + ip.address());
 
+
+var express = require('express');
 var app = express();
-var server = app.listen(3000, '0.0.0.0');
 app.use(express.static('public'));
+var server = app.listen(80,'0.0.0.0');
 
 var socket = require('socket.io');
 var io = socket(server);
@@ -29,7 +31,7 @@ function newConnection(socket) {
         console.log('disconnect ' + socket.id);
         socket.broadcast.emit("removeclient", { id: socket.id });
     }
-    
+
     function machineMessage(data) {
         //  console.log(data);
         socket.broadcast.emit("updateremotemachines", data);

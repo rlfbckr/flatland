@@ -1,5 +1,5 @@
 {
-  "name": "screenmachines",
+  "name": "flatland",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -12,17 +12,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rlfbckr/screenmachines.git"
+    "url": "git+https://github.com/rlfbckr/flatland.git"
   },
   "author": "Ralf Baecker",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/rlfbckr/screenmachines/issues"
+    "url": "https://github.com/rlfbckr/flatland/issues"
   },
-  "homepage": "https://github.com/rlfbckr/screenmachines#readme",
+  "homepage": "https://github.com/rlfbckr/flatland#readme",
   "dependencies": {
     "express": "^4.17.1",
     "ip": "^1.1.5",
+    "nodemon": "^2.0.7",
     "socket.io": "^3.1.2"
   }
 }

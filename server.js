@@ -8,7 +8,7 @@ platform collaborative generative practices
 const https = require('https');
 var express = require('express');
 var ip = require("ip");
-console.log("F-L-A-T-L-A-N-D S-E-R-V-E-R !");
+console.log("FLATLAND server !");
 console.log("serverIP : " + ip.address());
 
 var app = express();

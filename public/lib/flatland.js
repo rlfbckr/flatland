@@ -1,25 +1,41 @@
-const _VERSION = "v0.01c";
-const updateIntervall = 50; // 10 times per second
+const _VERSION = "v0.03";
+const updateIntervall = 30; // 10 times per second
 const MachineType = {
     NONE: 0,
     CIRCLE: 1,
     RECT: 2,
     TRI: 3,
     POINT: 4,
-    CUSTOM: 5
+    LINE: 5,
+    CUSTOM: 6
 };
 
-//function initSocketIO() {
-/*
-establish a connection to the central flatland server
-*/
-/*
- socket = io.connect(flatlandConfig.server);
- socket.on('updateremotemachines', updateRemoteMachines);
- socket.on('removemachine', removeMachine);
- console.log('socket.id = ' + socket.id);
- */
-//}
+function keyPressed() {
+    if (key == 'd') {
+        if (flatlandConfig.debug == false) {
+            flatlandConfig.debug = true;
+            gui.closed = false;
+        } else {
+            flatlandConfig.debug = false;
+            gui.closed = true;
+        }
+    }
+    if (key == 'c') {
+        if (flatlandConfig.clearscreen == false) {
+            flatlandConfig.clearscreen = true;
+        } else {
+            flatlandConfig.clearscreen = false;
+        }
+    }
+}
+
+function initSocketIO(_server) {
+    //establish a connection to the central flatland server
+    socket = io.connect(_server);
+    socket.on('updateremotemachines', updateRemoteMachines);
+    socket.on('removemachine', removeMachine);
+    console.log('socket.id = ' + socket.id);
+}
 
 function removeClient(data) {
     flatland.removeClient(data);
@@ -37,9 +53,9 @@ function updateRemoteMachines(data) {
 
 class Flatland {
     constructor() {
-        this.socket = io.connect(flatlandConfig.server);
-        this.socket.on('updateremotemachines', updateRemoteMachines);
-        this.socket.on('removemachine', removeMachine);
+        // this.socket = io.connect(flatlandConfig.server);
+        // this.socket.on('updateremotemachines', updateRemoteMachines);
+        // this.socket.on('removemachine', removeMachine);
         this.machinesLocal = [];
         this.machinesRemote = [];
         this.monofont = loadFont('/fonts/RobotoMono-Regular.otf');
@@ -50,11 +66,11 @@ class Flatland {
         this.overlayCanvas;
         this.overlayCanvas = createGraphics(windowWidth, windowHeight);
         this.overlayCanvas.textFont(this.monofont);
-        this.overlayCanvas.textSize(12);
+        this.overlayCanvas.textSize(13);
 
         this.drawingCanvas;
         this.drawingCanvas = createGraphics(windowWidth, windowHeight);
-        this.drawingCanvas.background(30, 30, 30);
+        this.drawingCanvas.background(flatlandConfig.backgroundcolor[0], flatlandConfig.backgroundcolor[1], flatlandConfig.backgroundcolor[2]);
         this.spawn();
 
     }
@@ -64,9 +80,10 @@ class Flatland {
     }
 
     clearScreen() {
-
+        background(0, 0, 0);
         if (flatlandConfig.clearscreen) {
-            background(flatlandConfig.backgroundcolor[0], flatlandConfig.backgroundcolor[1], flatlandConfig.backgroundcolor[2]);
+            //   background(flatlandConfig.backgroundcolor[0], flatlandConfig.backgroundcolor[1], flatlandConfig.backgroundcolor[2]);
+            this.drawingCanvas.background(flatlandConfig.backgroundcolor[0], flatlandConfig.backgroundcolor[1], flatlandConfig.backgroundcolor[2]);
         }
 
     }
@@ -77,16 +94,15 @@ class Flatland {
                 '-------------------------------------\n' +
                 'version  : ' + _VERSION + '\n' +
                 'fps      : ' + frameRate() + '\n' +
-                'myID     : ' + this.socket.id + '\n' +
+                'myID     : ' + socket.id + '\n' +
                 '#local   : ' + this.machineCountLocal() + "\n" +
-                '#remote  : ' + this.machineCountRemote() + "\n" +
-                'pendown  : ' + machineConfig.pendown + "\n" +
-                'pensize  : ' + machineConfig.pensize;
+                '#remote  : ' + this.machineCountRemote() + "\n";
+            'pendown  : ' + machineConfig.pendown;
             this.overlayCanvas.clear();
             this.overlayCanvas.fill(0);
             this.overlayCanvas.noStroke();
             this.overlayCanvas.rect(4, 5, 280, 180);
-            this.overlayCanvas.fill(255, 255,255);
+            this.overlayCanvas.fill(255, 255, 255);
             this.overlayCanvas.text(_debugmessage_, 10, 20);
             image(this.overlayCanvas, -width / 2, -height / 2);
         }
@@ -104,15 +120,14 @@ class Flatland {
     }
 
     updateRemoteMachines(data) {
-        if (data.socketid == flatland.socket.id) return; // my own machines
+        if (data.socketid == socket.id) return; // my own machines
         if (this.machinesRemote[data.machineid] && this.machinesRemote[data.machineid].isAlive()) {
-            // console.log("update");
             this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
             this.machinesRemote[data.machineid].setColor1(data.color1);
             this.machinesRemote[data.machineid].setColor2(data.color2);
             this.machinesRemote[data.machineid].setRotation(data.rotation);
-            this.machinesRemote[data.machineid].setPen(data.pencolor, data.pensize, data.pendown);
-
+            this.machinesRemote[data.machineid].setPen(data.pendown);
+            this.machinesRemote[data.machineid].setType(data.type);
 
         } else {
             //console.log("new");
@@ -123,7 +138,7 @@ class Flatland {
             this.machinesRemote[data.machineid].setColor1(data.color1);
             this.machinesRemote[data.machineid].setColor2(data.color2);
             this.machinesRemote[data.machineid].setRotation(data.rotation);
-            this.machinesRemote[data.machineid].setPen(data.pencolor, data.pensize, data.pendown);
+            this.machinesRemote[data.machineid].setPen(data.pendown);
 
         }
     }
@@ -131,6 +146,7 @@ class Flatland {
     update() {
         this.clearScreen();
         image(this.drawingCanvas, -width / 2, -height / 2);
+
         if (this.machinesLocal.length < machineConfig.maxCount) {
             this.spawn();
 
@@ -158,7 +174,7 @@ class Flatland {
                     this.machinesRemote[key].display();
                 }
                 */
-         this.drawDebugInformation();
+        this.drawDebugInformation();
     }
 
     machineCountRemote() {
@@ -186,9 +202,8 @@ class defaultMachine {
         this.size = _size;
         this.rotation = random(PI);
         this.lastupdate = millis();
-        this.pendown = true;
-        this.pencolor = color(255, 255, 255, 128);
-        this.pensize = 2.0;
+        // this.pendown = false;
+
         this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
         this.color2 = color(machineConfig.color2[0], machineConfig.color2[1], machineConfig.color2[2], machineConfig.color2Opacity * 255);
         this.speed = 1;
@@ -224,10 +239,11 @@ class defaultMachine {
     setMachineID(_machineid) {
         this.machineid = _machineid;
     }
-    setPen(_c, _size, _pendown) {
-        this.pencolor = color(_c.r, _c.g, _c.b, _c.a);
-        this.pensize = _size;
+    setPen(_pendown) {
         this.pendown = _pendown;
+    }
+    setType(_type) {
+        this.type = _type;
     }
     set(_x, _y, _size) {
         this.lastupdate = millis();
@@ -245,10 +261,10 @@ class defaultMachine {
         this.pos.x += random(-this.speed, this.speed);
         this.pos.y += random(-this.speed, this.speed);
         this.size = map(this.age(), 0, machineConfig.lifetime, machineConfig.maxSize, machineConfig.minSize);
-
     }
-
-
+    getLifetime() {
+        return map(this.age(), 0, machineConfig.lifetime, 0.0, 1.0);
+    }
     penUp() {
         this.pendown = false;
     }
@@ -270,12 +286,14 @@ class defaultMachine {
     }
     update() {
 
-        if (this.local == true && flatland.socket.id != undefined) {
-            this.socketid = flatland.socket.id;
+        if (this.local == true && socket.id != undefined) {
+            this.socketid = socket.id;
         }
         if (this.age() > machineConfig.lifetime) {
             this.setAlive(false);
-            flatland.socket.emit('removemachine', { machineid: this.machineid });
+            socket.emit('removemachine', {
+                machineid: this.machineid
+            });
 
         } else {
             if ((millis() - this.lastsend) > updateIntervall) {
@@ -287,6 +305,7 @@ class defaultMachine {
                         'y': this.pos.y
                     },
                     size: this.size,
+                    type: this.type,
                     color1: {
                         'r': this.color1.levels[0],
                         'g': this.color1.levels[1],
@@ -303,16 +322,9 @@ class defaultMachine {
                     age: this.age(),
                     rotation: this.rotation,
                     machineid: this.machineid,
-                    pensize: this.pensize,
                     pendown: this.pendown,
-                    pencolor: {
-                        'r': this.pencolor.levels[0],
-                        'g': this.pencolor.levels[1],
-                        'b': this.pencolor.levels[2],
-                        'a': this.pencolor.levels[3]
-                    }
                 }
-                flatland.socket.emit('machine', data);
+                socket.emit('machine', data);
             }
         }
         this.t++;
@@ -320,42 +332,80 @@ class defaultMachine {
         if (this.pos.y < -height / 2) this.pos.y = -height / 2;
         if (this.pos.x > width / 2) this.pos.x = width / 2;
         if (this.pos.y > height / 2) this.pos.y = height / 2;
-        this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
-        this.color2 = color(machineConfig.color2[0], machineConfig.color2[1], machineConfig.color2[2], machineConfig.color2Opacity * 255);
+        //        this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
+        //        this.color2 = color(machineConfig.color2[0], machineConfig.color2[1], machineConfig.color2[2], machineConfig.color2Opacity * 255);
+        this.pendown = machineConfig.pendown;
         this.lastupdate = millis();
-      //  this._drawOnCanvas();
+
+        this._drawOnCanvas();
 
     }
     _drawOnCanvas() {
-        if (this.local) {
-            this.pencolor = color(machineConfig.pencolor[0], machineConfig.pencolor[1], machineConfig.pencolor[2]);
-            this.pensize = machineConfig.pensize;
-            this.pendown = machineConfig.pendown;
-        }
+        //        this.pendown = true;
         if (this.pendown && (this.posPrevious.x != this.pos.x || this.posPrevious.y != this.pos.x)) {
-            flatland.drawingCanvas.stroke(this.pencolor);
-            flatland.drawingCanvas.strokeWeight(this.pensize);
-            flatland.drawingCanvas.line(this.posPrevious.x + width / 2, this.posPrevious.y + height / 2, this.pos.x + width / 2, this.pos.y + height / 2);
+            //   flatland.drawingCanvas.stroke(this.pencolor);
+            //  flatland.drawingCanvas.strokeWeight(this.pensize);
+            // flatland.drawingCanvas.line(this.posPrevious.x + width / 2, this.posPrevious.y + height / 2, this.pos.x + width / 2, this.pos.y + height / 2);
+            flatland.drawingCanvas.fill(this.color1);
+            flatland.drawingCanvas.stroke(this.color2)
+            if (this.type == MachineType.LINE) {
+                flatland.drawingCanvas.strokeWeight(this.size);
+                //                flatland.drawingCanvas.point(this.pos.x + width / 2, this.pos.y + height / 2)
+                flatland.drawingCanvas.line(this.posPrevious.x + width / 2, this.posPrevious.y + height / 2, this.pos.x + width / 2, this.pos.y + height / 2);
+            }
+            if (this.type == MachineType.POINT) {
+                flatland.drawingCanvas.strokeWeight(this.size);
+                flatland.drawingCanvas.point(this.pos.x + width / 2, this.pos.y + height / 2)
+            }
+            if (this.type == MachineType.CIRCLE) {
+                flatland.drawingCanvas.strokeWeight(1);
+                flatland.drawingCanvas.push();
+                flatland.drawingCanvas.translate(this.pos.x + width / 2, this.pos.y + height / 2);
+                flatland.drawingCanvas.ellipse(0, 0, this.size, this.size);
+                flatland.drawingCanvas.pop();
+            }
+            if (this.type == MachineType.RECT) {
+                flatland.drawingCanvas.strokeWeight(1);
+                flatland.drawingCanvas.rectMode(CENTER)
+                flatland.drawingCanvas.push();
+                flatland.drawingCanvas.translate(this.pos.x + width / 2, this.pos.y + height / 2);
+                flatland.drawingCanvas.rotateZ(this.rotation);
+                flatland.drawingCanvas.rect(0, 0, this.size, this.size);
+
+                flatland.drawingCanvas.pop();
+            }
+
         }
 
     }
     _displayMachine() {
-        strokeWeight(1);
+        // fill(128, 255, 128);
         fill(this.color1);
         stroke(this.color2)
-        //console.log(this.type);
+            //console.log(this.type);
+        if (this.type == MachineType.LINE) {
+            strokeWeight(this.size);
+            point(this.pos.x, this.pos.y)
+        }
+
+        if (this.type == MachineType.POINT) {
+            stroke(this.color2)
+            point(this.pos.x, this.pos.y)
+        }
         if (this.type == MachineType.CIRCLE) {
+            strokeWeight(1);
             push();
             translate(this.pos.x, this.pos.y);
             ellipse(0, 0, this.size, this.size);
             pop();
         }
         if (this.type == MachineType.RECT) {
+            strokeWeight(1);
             rectMode(CENTER)
             push();
             translate(this.pos.x, this.pos.y);
             rotateZ(this.rotation);
-            rect(0, 0, this.size, this.size); this
+            rect(0, 0, this.size, this.size);
             pop();
         }
     }
@@ -363,22 +413,21 @@ class defaultMachine {
     display() {
         if (this.isAlive()) {
             this._displayMachine();
-            fill(128);
+            fill(0, 255, 0);
             if (this.local == true) {
-                /*                if (flatlandConfig.debug) {
-                                    text("LOCAL:\n" + flatland.socket.id + "\n" + this.machineid, this.pos.x, this.pos.y);
-                                }
-                                */
+                if (flatlandConfig.debug) {
+                    text("LOCAL:\n" + socket.id + "\n" + this.machineid + "\n" + this.pos.x + " " + this.pos.y, this.pos.x, this.pos.y);
+                }
+
             } else {
 
-                /*
+
                 if (flatlandConfig.debug) {
                     text("REMOTE\n: " + this.socketid + "\n" + this.machineid, this.pos.x, this.pos.y);
                 }
-                */
+
             }
         }
     }
 
 }
-

@@ -1,6 +1,6 @@
-//let socket
-let gui;
-let flatland;
+/*
+   Brownian.dot Machine Demo
+*/
 
 var flatlandConfig = {
     // server: "http://localhost:3000",
@@ -8,7 +8,8 @@ var flatlandConfig = {
     land: 'default',
     debug: true,
     clearscreen: true,
-    backgroundcolor: [255, 255, 255]
+    backgroundcolor: [255, 255, 255],
+    backgroundblend: 0.5
 }
 
 var machineConfig = {
@@ -23,19 +24,6 @@ var machineConfig = {
     color2Opacity: 0.1,
     pendown: true
 
-}
-
-function setup() {
-    createCanvas(windowWidth, windowHeight, WEBGL);
-    flatland = new Flatland(); // connect to the flatland server
-    initGui();
-    frameRate(100);
-    initSocketIO(flatlandConfig.server);
-}
-
-
-function draw() {
-    flatland.update(); // update + draw flatland
 }
 
 class Machine extends defaultMachine {
@@ -63,6 +51,25 @@ class Machine extends defaultMachine {
     }
 
 }
+// --------------------------------------------------------------
+//let socket
+let gui;
+let flatland;
+
+
+function setup() {
+    createCanvas(windowWidth, windowHeight, WEBGL);
+    flatland = new Flatland(); // connect to the flatland server
+    initGui();
+    frameRate(100);
+    initSocketIO(flatlandConfig.server);
+}
+
+
+function draw() {
+    flatland.update(); // update + draw flatland
+}
+
 
 
 function initGui() {
@@ -72,6 +79,7 @@ function initGui() {
     guiFlatlandFolder.add(flatlandConfig, 'server');
     guiFlatlandFolder.add(flatlandConfig, 'debug');
     guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
+    guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);
     guiFlatlandFolder.add(flatlandConfig, 'clearscreen');
     guiFlatlandFolder.open();
 

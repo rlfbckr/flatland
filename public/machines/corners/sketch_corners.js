@@ -1,6 +1,6 @@
-//let socket
-let gui;
-let flatland;
+/*
+   Corner Machine Demo
+*/
 
 var flatlandConfig = {
     // server: "http://localhost:3000",
@@ -8,7 +8,8 @@ var flatlandConfig = {
     land: 'default',
     debug: true,
     clearscreen: false,
-    backgroundcolor: [255, 255, 255]
+    backgroundcolor: [255, 255, 255],
+    backgroundblend: 0.5
 }
 
 var machineConfig = {
@@ -24,18 +25,6 @@ var machineConfig = {
     pendown: true
 }
 
-function setup() {
-    createCanvas(windowWidth, windowHeight, WEBGL);
-    flatland = new Flatland(); // connect to the flatland server
-    initGui();
-    frameRate(100);
-    initSocketIO(flatlandConfig.server);
-}
-
-
-function draw() {
-    flatland.update(); // update + draw flatland
-}
 
 class Machine extends defaultMachine {
     setup() {
@@ -58,12 +47,29 @@ class Machine extends defaultMachine {
         )
         this.pos.x += cos(this.rotation) * 2;
         this.pos.y += sin(this.rotation) * 2;
-        // this.size = map(this.age(), 0, machineConfig.lifetime, machineConfig.maxSize, machineConfig.minSize);
         if (int(random(20) <= 1)) {
             this.rotation = this.rotation + (int(random(-2, 2)) * 45);
         }
     }
 
+}
+
+// ------------------------------------------------------------------
+//let socket
+let gui;
+let flatland;
+
+function setup() {
+    createCanvas(windowWidth, windowHeight, WEBGL);
+    flatland = new Flatland(); // connect to the flatland server
+    initGui();
+    frameRate(100);
+    initSocketIO(flatlandConfig.server);
+}
+
+
+function draw() {
+    flatland.update(); // update + draw flatland
 }
 
 
@@ -74,6 +80,9 @@ function initGui() {
     guiFlatlandFolder.add(flatlandConfig, 'server');
     guiFlatlandFolder.add(flatlandConfig, 'debug');
     guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
+    guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);
+
+
     guiFlatlandFolder.add(flatlandConfig, 'clearscreen');
     guiFlatlandFolder.open();
 

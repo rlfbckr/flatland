@@ -83,7 +83,7 @@ class Flatland {
         background(0, 0, 0);
         if (flatlandConfig.clearscreen) {
             //   background(flatlandConfig.backgroundcolor[0], flatlandConfig.backgroundcolor[1], flatlandConfig.backgroundcolor[2]);
-            this.drawingCanvas.background(flatlandConfig.backgroundcolor[0], flatlandConfig.backgroundcolor[1], flatlandConfig.backgroundcolor[2]);
+            this.drawingCanvas.background(flatlandConfig.backgroundcolor[0], flatlandConfig.backgroundcolor[1], flatlandConfig.backgroundcolor[2], flatlandConfig.backgroundblend * 255);
         }
 
     }

@@ -1,63 +1,58 @@
 /*
-   Corner Machine Demo
+   Brownian.dot Machine Demo
 */
 
 var flatlandConfig = {
-
+    // server: "http://localhost:3000",
     server: "http://flatland.earth",
     land: 'default',
     debug: true,
-    clearscreen: false,
+    clearscreen: true,
     backgroundcolor: [255, 255, 255],
     backgroundblend: 0.5
 }
 
 var machineConfig = {
-    name: 'cicles',
-    maxCount: 2,
-    minSize: 1,
-    maxSize: 1,
-    lifetime: 5000,
-    color1: [255, 255, 0],
-    color1Opacity: 0.5,
-    color2: [255, 0, 255],
-    color2Opacity: 0.5,
+    name: 'empty-machine-example',
+    maxCount: 10,
+    minSize: 20,
+    maxSize: 30,
+    lifetime: 20000,
+    color1: [255, 0, 255],
+    color1Opacity: 0.1,
+    color2: [0, 255, 255],
+    color2Opacity: 0.1,
     pendown: true
+
 }
 
 
+
+// ---------------------------------------------------------------
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine
-        machineConfig.pendown = true;
-        this.type = MachineType.LINE;
-        this.rotation = (int(random(-4, 4)) * 45);
-        this.rotationspeed = random(-0.05, 0.05);
-        this.speed = 10;
-        this.size = random(2, 10);
-        this.step = 20;
+        this.type = MachineType.CIRCLE;
     }
-
     move() {
+        this.pos.x = random(-width / 2, width / 2);
+        this.pos.y = 0;
         // how does your machine move 
-        this.color2 = color(
-            lerp(machineConfig.color1[0], machineConfig.color2[0], this.getLifetime()),
-            lerp(machineConfig.color1[1], machineConfig.color2[1], this.getLifetime()),
-            lerp(machineConfig.color1[2], machineConfig.color2[2], this.getLifetime()),
-        )
-        this.pos.x += cos(this.rotation) * 2;
-        this.pos.y += sin(this.rotation) * 2;
-        if (int(random(20) <= 1)) {
-            this.rotation = this.rotation + (int(random(-2, 2)) * 45);
-        }
     }
-
 }
+// --------------------------------------------------------------
 
-// ------------------------------------------------------------------
+
+
+
+
+
+
+
 //let socket
 let gui;
 let flatland;
+
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
@@ -65,12 +60,14 @@ function setup() {
     initGui();
     frameRate(100);
     initSocketIO(flatlandConfig.server);
+    gravitation = createVector(0, 0);
 }
 
 
 function draw() {
     flatland.update(); // update + draw flatland
 }
+
 
 
 function initGui() {
@@ -81,8 +78,6 @@ function initGui() {
     guiFlatlandFolder.add(flatlandConfig, 'debug');
     guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
     guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);
-
-
     guiFlatlandFolder.add(flatlandConfig, 'clearscreen');
     guiFlatlandFolder.open();
 

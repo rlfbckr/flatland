@@ -13,18 +13,22 @@ var flatlandConfig = {
 }
 
 var machineConfig = {
-    name: 'browniandots',
+    name: 'bouncingballs',
     maxCount: 10,
     minSize: 20,
-    maxSize: 150,
-    lifetime: 10000,
-    color1: [0, 0, 255],
+    maxSize: 30,
+    lifetime: 20000,
+    color1: [255, 0, 255],
     color1Opacity: 0.1,
-    color2: [255, 255, 255],
+    color2: [0, 255, 255],
     color2Opacity: 0.1,
     pendown: true
 
 }
+
+let gravitation;
+let friction = 0.7;
+let lastspawn = 0;
 
 class Machine extends defaultMachine {
     setup() {
@@ -33,6 +37,7 @@ class Machine extends defaultMachine {
         this.type = MachineType.CIRCLE;
         this.rotationspeed = random(-0.05, 0.05);
         this.speed = 10;
+        this.velocity = createVector(random(-5, 5), random(-5, 5));
     }
     move() {
         // how does your machine move 
@@ -42,12 +47,27 @@ class Machine extends defaultMachine {
             lerp(machineConfig.color2[2], machineConfig.color1[2], this.getLifetime()),
         )
         this.color2 = color(255, 255, 255);
+        this.velocity.add(gravitation);
+        this.pos.add(this.velocity);
 
-        this.rotation += this.rotationspeed;
-        this.pos.x += random(-this.speed, this.speed);
-        this.pos.y += random(-this.speed, this.speed);
-        this.size = map(this.age(), 0, machineConfig.lifetime, machineConfig.maxSize, machineConfig.minSize);
+        // einfallswinkel = ausfallswinkel
+        if ((this.pos.x - this.size / 2) <= (-width / 2)) {
+            this.pos.x = (-width / 2) + (this.size / 2);
+            this.velocity.x *= -friction;
+        }
+        if ((this.pos.x + this.size / 2) >= (width / 2)) {
+            this.pos.x = (width / 2) - (this.size / 2);
+            this.velocity.x *= -friction;
+        }
+        if ((this.pos.y - this.size / 2) <= (-height / 2)) {
+            this.pos.y = (-height / 2) + (this.size / 2);
+            this.velocity.y *= -friction;
+        }
+        if ((this.pos.y + this.size / 2) >= (height / 2)) {
+            this.pos.y = (height / 2) - (this.size / 2);
+            this.velocity.y *= -friction;
 
+        }
     }
 
 }
@@ -63,6 +83,7 @@ function setup() {
     initGui();
     frameRate(100);
     initSocketIO(flatlandConfig.server);
+    gravitation = createVector(0, 0);
 }
 
 

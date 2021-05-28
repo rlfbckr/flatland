@@ -1,5 +1,5 @@
 const _VERSION = "v0.03";
-const updateIntervall = 30; // 10 times per second
+const updateIntervall = 10; // 10 times per second
 const MachineType = {
     NONE: 0,
     CIRCLE: 1,
@@ -14,10 +14,11 @@ function keyPressed() {
     if (key == 'd') {
         if (flatlandConfig.debug == false) {
             flatlandConfig.debug = true;
-            gui.closed = false;
+            gui.show();
         } else {
+
             flatlandConfig.debug = false;
-            gui.closed = true;
+            gui.hide();
         }
     }
     if (key == 'c') {
@@ -76,7 +77,9 @@ class Flatland {
     }
 
     spawn() {
-        this.machinesLocal.push(new Machine(this.genRandomMachineID(), random(-width / 2, width / 2), random(-height / 2, height / 2), 100, true));
+        if (!flatlandConfig.presenter) {
+            this.machinesLocal.push(new Machine(this.genRandomMachineID(), random(-width / 2, width / 2), random(-height / 2, height / 2), 100, true));
+        }
     }
 
     clearScreen() {
@@ -146,19 +149,21 @@ class Flatland {
     update() {
         this.clearScreen();
         image(this.drawingCanvas, -width / 2, -height / 2);
+        if (!flatlandConfig.presenter) {
+            if (this.machinesLocal.length < machineConfig.maxCount) {
+                this.spawn();
 
-        if (this.machinesLocal.length < machineConfig.maxCount) {
-            this.spawn();
+            }
 
-        }
-        for (let i = 0; i < this.machinesLocal.length; i++) {
-            if (!this.machinesLocal[i].isAlive()) {
-                this.machinesLocal.splice(i, 1);
-            } else {
-                this.machinesLocal[i].premove();
-                this.machinesLocal[i].move();
-                this.machinesLocal[i].update();
-                this.machinesLocal[i].display();
+            for (let i = 0; i < this.machinesLocal.length; i++) {
+                if (!this.machinesLocal[i].isAlive()) {
+                    this.machinesLocal.splice(i, 1);
+                } else {
+                    this.machinesLocal[i].premove();
+                    this.machinesLocal[i].move();
+                    this.machinesLocal[i].update();
+                    this.machinesLocal[i].display();
+                }
             }
         }
         for (var key in this.machinesRemote) {

@@ -6,15 +6,16 @@ var flatlandConfig = {
     // server: "http://localhost:3000",
     server: "http://flatland.earth",
     land: 'default',
-    debug: true,
+    debug: false,
+    presenter: true,
     clearscreen: true,
     backgroundcolor: [255, 255, 255],
     backgroundblend: 0.5
 }
 
 var machineConfig = {
-    name: 'empty-machine-example',
-    maxCount: 10,
+    name: 'presenter',
+    maxCount: 0,
     minSize: 20,
     maxSize: 30,
     lifetime: 20000,
@@ -35,8 +36,7 @@ class Machine extends defaultMachine {
         this.type = MachineType.CIRCLE;
     }
     move() {
-        this.pos.x = random(-width / 2, width / 2);
-        this.pos.y = 0;
+
         /*
         for (remotemachine of flatland.machinesRemote) {
             if (dist(this.pos.x, this.pos.y, remotemachine.pos.x, remotemachine.pos.y) < 100) {
@@ -53,24 +53,18 @@ class Machine extends defaultMachine {
 // --------------------------------------------------------------
 
 
-
-
-
-
-
-
 //let socket
 let gui;
-let flatland;
-
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     flatland = new Flatland(); // connect to the flatland server
     initGui();
+    gui.hide();
+    flatlandConfig.debug = false;
     frameRate(100);
     initSocketIO(flatlandConfig.server);
-    gravitation = createVector(0, 0);
+
 }
 
 
@@ -91,19 +85,7 @@ function initGui() {
     guiFlatlandFolder.add(flatlandConfig, 'clearscreen');
     guiFlatlandFolder.open();
 
-    let guiMachineFolder = gui.addFolder("machineConfig");
 
-    guiMachineFolder.add(machineConfig, 'name');
-    guiMachineFolder.add(machineConfig, 'maxCount', 1, 100);
-    guiMachineFolder.add(machineConfig, "minSize", 1, 200);
-    guiMachineFolder.add(machineConfig, "maxSize", 1, 200);
-    guiMachineFolder.add(machineConfig, "lifetime", 1, 20000);
-    guiMachineFolder.addColor(machineConfig, 'color1');
-    guiMachineFolder.add(machineConfig, 'color1Opacity', 0, 1);
-    guiMachineFolder.addColor(machineConfig, 'color2');
-    guiMachineFolder.add(machineConfig, 'color2Opacity', 0.0, 1.0);
-    guiMachineFolder.add(machineConfig, 'pendown');
-    guiMachineFolder.open();
 }
 
 /*

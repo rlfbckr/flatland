@@ -1,5 +1,5 @@
 const _VERSION = "v0.03";
-const updateIntervall = 10; // 10 times per second
+//const updateIntervall = 10; // 10 times per second
 const MachineType = {
     NONE: 0,
     CIRCLE: 1,
@@ -301,7 +301,7 @@ class defaultMachine {
             });
 
         } else {
-            if ((millis() - this.lastsend) > updateIntervall) {
+            if ((millis() - this.lastsend) > flatlandConfig.updateIntervall) {
                 this.lastsend = millis();
                 //send my machine data to server
                 var data = {

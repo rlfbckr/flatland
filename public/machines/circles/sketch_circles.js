@@ -5,6 +5,7 @@
 var flatlandConfig = {
     server: "http://flatland.earth",
     land: 'default',
+    updateIntervall : 10, 
     debug: false,
     clearscreen: true,
     backgroundcolor: [255, 255, 255],
@@ -78,6 +79,7 @@ function initGui() {
     let guiFlatlandFolder = gui.addFolder('flatlandConfig');
     guiFlatlandFolder.add(flatlandConfig, 'server');
     guiFlatlandFolder.add(flatlandConfig, 'debug');
+    guiFlatlandFolder.add(flatlandConfig, 'updateIntervall', 1, 250);
     guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
     guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);
     guiFlatlandFolder.add(flatlandConfig, 'clearscreen');

@@ -1,5 +1,5 @@
 /*
-   Brownian.dot Machine Demo
+   empty machine example
 */
 
 var flatlandConfig = {

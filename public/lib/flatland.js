@@ -59,7 +59,7 @@ class Flatland {
         // this.socket.on('removemachine', removeMachine);
         this.machinesLocal = [];
         this.machinesRemote = [];
-        this.monofont = loadFont('/fonts/RobotoMono-Regular.otf');
+        this.monofont = loadFont('/assets//fonts/RobotoMono-Regular.otf');
 
         textFont(this.monofont);
         textSize(12);

@@ -22,6 +22,24 @@ body a {
     cursor: pointer;
 }
 
+ol {
+    counter-reset: items;
+  }
+  li {
+    display: block;
+    counter-increment: items;
+  }
+  li:before {
+    content: "0" counter(items)" ";
+  }
+  li:nth-child(n+10):before {
+    content: "0" counter(items)" ";
+  }
+  li:nth-child(n+100):before {
+    content: counter(items)" ";
+  }
+  
 .light {
     color: #222222;
 }
+

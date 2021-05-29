@@ -36,17 +36,6 @@ class Machine extends defaultMachine {
         this.type = MachineType.CIRCLE;
     }
     move() {
-
-        /*
-        for (remotemachine of flatland.machinesRemote) {
-            if (dist(this.pos.x, this.pos.y, remotemachine.pos.x, remotemachine.pos.y) < 100) {
-                // mir kommt ein fremder bot zu nahme. ich haue ab
-                this.pos.x = this.pos.x + random(-100, 100);
-                this.pos.y = this.pos.y + random(-100, 100);
-            }
-
-        }
-        */
         // how does your machine move 
     }
 }

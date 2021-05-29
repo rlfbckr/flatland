@@ -208,7 +208,7 @@ class defaultMachine {
         this.rotation = random(PI);
         this.lastupdate = millis();
         // this.pendown = false;
-
+        this.type = MachineType.CIRCLE;
         this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
         this.color2 = color(machineConfig.color2[0], machineConfig.color2[1], machineConfig.color2[2], machineConfig.color2Opacity * 255);
         this.speed = 1;

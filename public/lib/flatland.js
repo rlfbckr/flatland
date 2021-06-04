@@ -157,6 +157,7 @@ class Flatland {
 
             for (let i = 0; i < this.machinesLocal.length; i++) {
                 if (!this.machinesLocal[i].isAlive()) {
+                    this.machinesLocal[i].stop();
                     this.machinesLocal.splice(i, 1);
                 } else {
                     this.machinesLocal[i].premove();
@@ -207,6 +208,11 @@ class defaultMachine {
         this.size = _size;
         this.rotation = random(PI);
         this.lastupdate = millis();
+        this.audio = false;
+        this.osc, this.playing, this.freq, this.amp;
+        this.freq =440;
+        this.amp = 0.2;
+
         // this.pendown = false;
         this.type = MachineType.CIRCLE;
         this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
@@ -220,6 +226,26 @@ class defaultMachine {
         this.setup();
     }
 
+    stop() {
+
+        this.osc.stop();
+    }
+    enableAudio() {
+        this.osc = new p5.Oscillator('sine');
+        this.audio = true;
+        this.osc.freq(1, 0.1);
+        this.osc.amp(0, 1);
+        this.osc.start();
+
+    }
+
+    updateSound(_freq,_amp) {
+        this.freq = _freq;
+        this.amp = _amp;
+        this.osc.freq(this.freq, 0.5);
+        this.osc.amp(this.amp, 0.5);
+
+    }
     setup() {
         // can be overwritte
     }

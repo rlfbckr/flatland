@@ -227,8 +227,16 @@ class defaultMachine {
     }
 
     stop() {
+        this.osc.amp(0,1.0);
 
-        this.osc.stop();
+        this.osc.stop(1.0);
+    }
+    setPhase(_phase) {
+        this.osc.phase(_phase);
+    }
+    setPan(_pan) {
+        this.osc.pan(_pan,0.9);
+
     }
     enableAudio() {
         this.osc = new p5.Oscillator('sine');
@@ -242,12 +250,12 @@ class defaultMachine {
     updateSound(_freq,_amp) {
         this.freq = _freq;
         this.amp = _amp;
-        this.osc.freq(this.freq, 0.5);
-        this.osc.amp(this.amp, 0.5);
+        this.osc.freq(this.freq, 0.8);
+        this.osc.amp(this.amp, 0.8);
 
     }
     setup() {
-        // can be overwritte
+        // can be overwritten
     }
     setAlive(_set) {
         this.alive = _set;

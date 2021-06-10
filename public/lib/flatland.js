@@ -1,5 +1,27 @@
 const _VERSION = "v0.04";
 
+/*
+TODO
+[x] communication test
+[x] socket io include
+[x] https
+[x] sound
+[x] rectangle ????? checken
+[x] typography example
+[x] sound example
+
+- interaction collision example 
+- beispiel zusammenhänge objekte (job für ralf)
+- pendown??? checken
+- installations tutorial
+- linien (vektoren) zwischen zwei bots ?
+- multi land möglichkeite
+
+
+
+*/
+
+
 const MachineType = {
     NONE: 0,
     CIRCLE: 1,

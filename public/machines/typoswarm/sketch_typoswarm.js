@@ -1,5 +1,5 @@
 /*
-   mouse control + sound
+   empty machine example
 */
 
 var flatlandConfig = {
@@ -14,16 +14,17 @@ var flatlandConfig = {
 }
 
 var machineConfig = {
-    name: 'mousecontrol',
-    maxCount: 5,
-    minSize: 1,
-    maxSize: 200,
-    lifetime: 2000,
-    color1: [255, 0, 255],
-    color1Opacity: 0.1,
+    name: 'empty-machine-example',
+    maxCount: 10,
+    minSize: 20,
+    maxSize: 30,
+    lifetime: 6000,
+    color1: [0, 0, 0],
+    color1Opacity: 0.5,
     color2: [0, 255, 255],
     color2Opacity: 0.1,
     pendown: true
+
 }
 
 
@@ -33,39 +34,26 @@ class Machine extends defaultMachine {
     setup() {
         // initialize your machine
         this.type = MachineType.CIRCLE;
-        this.angle = random(PI * 2);
-        this.radius = random(50, (height / 2.0) * 0.7);
-        this.speed = random(-0.09, 0.09);
-        this.freq = 1;
-        this.amp = 0;
-
-        //this.size= random(10,100);
-
-        this.color1 = color(random(255), random(255), random(255), random(100, 200));
-        this.enableAudio();
-        this.setPhase(map(this.speed, -0.1, 0.1, 0, 1));
-        this.lastaudioupdate = 0;
-        this.centerX = 0; //mouse pos
-        this.centerY = 0;
-
-
+        this.pos.x = random(-width / 2, width / 2);
+        this.pos.y = random(-height / 2, height / 2);
+        this.size = 10;
     }
     move() {
- 
-        this.angle += this.speed;
-        this.size = map(this.getLifetime(), 0, 1.0, machineConfig.maxSize, machineConfig.minSize);
-        var tmpr = this.radius + (sin(millis() * 0.001) * 100);
-        this.pos.x = centerOfSystemX  + (cos(this.angle) * tmpr);
-        this.pos.y = centerOfSystemY  + (sin(this.angle) * tmpr);
-        if ((millis() - this.lastaudioupdate) > 100) {
-            this.setPan(constrain(map(this.pos.x, -width / 2, width / 2, -1.0, 1.0), -1, 1));
-            this.updateSound(
-                map(this.speed, -0.1, 0.1, 50, 2600),
-                map(this.getLifetime(), 0.0, 1.0, (1.0 / machineConfig.maxCount) * 0.5, 0)
-            );
-            this.lastaudioupdate = millis();
+        if (this.id >= 0 && this.id < points.length) {
+            this.pos.x = (this.pos.x * 0.95) + (points[this.id].x * 0.05);
+            this.pos.y = (this.pos.y * 0.95) + (points[this.id].y * 0.05);
         }
-
+        /*
+                for (remotemachine of flatland.machinesRemote) {
+                    if (dist(this.pos.x, this.pos.y, remotemachine.pos.x, remotemachine.pos.y) < 100) {
+                        // mir kommt ein fremder bot zu nahme. ich haue ab
+                        this.pos.x = this.pos.x + random(-100, 100);
+                        this.pos.y = this.pos.y + random(-100, 100);
+                    }
+        
+                }
+                */
+        // how does your machine move 
     }
 }
 // --------------------------------------------------------------
@@ -80,9 +68,12 @@ class Machine extends defaultMachine {
 //let socket
 let gui;
 let flatland;
-
-let centerOfSystemX = 0;
-let centerOfSystemY = 0;
+let typo;
+let points;
+let bounds;
+function preload() {
+    typo = loadFont('../../assets/fonts/RobotoMono-Regular.otf');
+}
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
@@ -91,17 +82,33 @@ function setup() {
     frameRate(100);
     initSocketIO(flatlandConfig.server);
     gravitation = createVector(0, 0);
-    console.log("hi");
+
+
+    textAlign(CENTER, CENTER);
+    points = typo.textToPoints('flat!', 0, 0, 0, {
+        sampleFactor: 0.8,
+        simplifyThreshold: 0
+    });
+
+    for (let i = 0; i < points.length; i++) {
+        points[i].x = points[i].x*20 - width/3;
+        points[i].y = points[i].y*20;
+
+    }
+
+    machineConfig.maxCount = points.length;
+
+    //textFont(typo);
+    //textSize(100);
+
 }
 
 
 function draw() {
-    if (mouseIsPressed) {
-        centerOfSystemX = mouseX- (width / 2);
-        centerOfSystemY = mouseY- (height / 2);
-    }
     flatland.update(); // update + draw flatland
+ 
 }
+
 
 
 function initGui() {

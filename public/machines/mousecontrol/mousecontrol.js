@@ -4,7 +4,7 @@
 
 var flatlandConfig = {
     // server: "http://localhost:3000",
-    server: "http://flatland.earth",
+    server: "https://flatland.earth",
     land: 'default',
     updateIntervall: 10,
     debug: false,
@@ -16,8 +16,8 @@ var flatlandConfig = {
 var machineConfig = {
     name: 'mousecontrol',
     maxCount: 5,
-    minSize: 20,
-    maxSize: 30,
+    minSize: 1,
+    maxSize: 200,
     lifetime: 2000,
     color1: [255, 0, 255],
     color1Opacity: 0.1,
@@ -51,7 +51,7 @@ class Machine extends defaultMachine {
     move() {
 
         this.angle += this.speed;
-        this.size = map(this.getLifetime(), 0, 1.0, 60, 0);
+        this.size = map(this.getLifetime(), 0, 1.0, machineConfig.maxSize, machineConfig.minSize);
         var tmpr = this.radius + (sin(millis() * 0.001) * 100);
         this.pos.x = mouseX - (width / 2) + (cos(this.angle) * tmpr);
         this.pos.y = mouseY - (height / 2) + (sin(this.angle) * tmpr);

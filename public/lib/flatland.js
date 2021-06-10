@@ -157,7 +157,9 @@ class Flatland {
 
             for (let i = 0; i < this.machinesLocal.length; i++) {
                 if (!this.machinesLocal[i].isAlive()) {
-                    this.machinesLocal[i].stop();
+                    if (this.machinesLocal[i].audio == true) {
+                        this.machinesLocal[i].stop();
+                    }
                     this.machinesLocal.splice(i, 1);
                 } else {
                     this.machinesLocal[i].premove();
@@ -424,7 +426,7 @@ class defaultMachine {
         // fill(128, 255, 128);
         fill(this.color1);
         stroke(this.color2)
-        //console.log(this.type);
+            //console.log(this.type);
         if (this.type == MachineType.LINE) {
             strokeWeight(this.size);
             point(this.pos.x, this.pos.y)

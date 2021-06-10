@@ -164,7 +164,7 @@ class Flatland {
                 } else {
                     this.machinesLocal[i].premove();
                     this.machinesLocal[i].move();
-                    this.machinesLocal[i].update();
+                    this.machinesLocal[i].update(i);
                     this.machinesLocal[i].display();
                 }
             }
@@ -203,6 +203,7 @@ class Flatland {
 class defaultMachine {
     constructor(_machineid, _x, _y, _size, _isLocal) {
         this.t = 0;
+        this.id = 0;
         this.alive = true;
         this.type = MachineType.RECT;
         this.pos = createVector(_x, _y);
@@ -328,8 +329,8 @@ class defaultMachine {
 
         }
     }
-    update() {
-
+    update(_id) {
+        this.id = _id;
         if (this.local == true && socket.id != undefined) {
             this.socketid = socket.id;
         }
@@ -413,7 +414,7 @@ class defaultMachine {
                 flatland.drawingCanvas.rectMode(CENTER)
                 flatland.drawingCanvas.push();
                 flatland.drawingCanvas.translate(this.pos.x + width / 2, this.pos.y + height / 2);
-                flatland.drawingCanvas.rotateZ(this.rotation);
+                flatland.drawingCanvas.rotate(this.rotation);
                 flatland.drawingCanvas.rect(0, 0, this.size, this.size);
 
                 flatland.drawingCanvas.pop();

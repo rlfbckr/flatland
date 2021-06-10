@@ -6,7 +6,7 @@ var flatlandConfig = {
     // server: "http://localhost:3000",
     server: "http://flatland.earth",
     land: 'default',
-    updateIntervall : 10, 
+    updateIntervall: 10,
     debug: false,
     clearscreen: true,
     backgroundcolor: [255, 255, 255],
@@ -33,33 +33,37 @@ class Machine extends defaultMachine {
     setup() {
         // initialize your machine
         this.type = MachineType.CIRCLE;
-        this.angle = random(PI*2);
-        this.radius = random(50,(height/2.0)*0.7);
-        this.speed = random(-0.09,0.09);
-        this.freq= 1;
+        this.angle = random(PI * 2);
+        this.radius = random(50, (height / 2.0) * 0.7);
+        this.speed = random(-0.09, 0.09);
+        this.freq = 1;
         this.amp = 0;
 
         //this.size= random(10,100);
-        this.color1 = color(random(255),random(255),random(255),random(100,200));
+
+        this.color1 = color(random(255), random(255), random(255), random(100, 200));
         this.enableAudio();
-        this.setPhase(map(this.speed,-0.1,0.1,0,1));
+        this.setPhase(map(this.speed, -0.1, 0.1, 0, 1));
         this.lastaudioupdate = 0;
-    
+
+
     }
     move() {
-        this.angle+=this.speed;
-        this.size = map(this.getLifetime(),0,1.0,60,0);
-        var tmpr = this.radius+(sin(millis()*0.001)*100);
-        this.pos.x=mouseX-(width/2)+(cos(this.angle)*tmpr);
-        this.pos.y=mouseY-(height/2)+(sin(this.angle)*tmpr);
-        if ((millis()-this.lastaudioupdate)> 100) {
-            this.setPan(constrain(map(this.pos.x,-width/2,width/2,-1.0,1.0),-1,1));
+
+        this.angle += this.speed;
+        this.size = map(this.getLifetime(), 0, 1.0, 60, 0);
+        var tmpr = this.radius + (sin(millis() * 0.001) * 100);
+        this.pos.x = mouseX - (width / 2) + (cos(this.angle) * tmpr);
+        this.pos.y = mouseY - (height / 2) + (sin(this.angle) * tmpr);
+        if ((millis() - this.lastaudioupdate) > 100) {
+            this.setPan(constrain(map(this.pos.x, -width / 2, width / 2, -1.0, 1.0), -1, 1));
             this.updateSound(
-                map(this.speed,-0.1,0.1,50,2600),            
-                map(this.getLifetime(),0.0,1.0,(1.0/machineConfig.maxCount)*0.5,0)
-                );
+                map(this.speed, -0.1, 0.1, 50, 2600),
+                map(this.getLifetime(), 0.0, 1.0, (1.0 / machineConfig.maxCount) * 0.5, 0)
+            );
             this.lastaudioupdate = millis();
         }
+
     }
 }
 // --------------------------------------------------------------
@@ -83,13 +87,13 @@ function setup() {
     frameRate(100);
     initSocketIO(flatlandConfig.server);
     gravitation = createVector(0, 0);
+    console.log("hi");
 }
 
 
 function draw() {
     flatland.update(); // update + draw flatland
 }
-
 
 
 function initGui() {

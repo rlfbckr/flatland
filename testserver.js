@@ -1,33 +1,16 @@
-const express = require('express');
-const http = require('http');
-const https = require('https');
-const fs = require('fs');
-const httpPort = 3000;
-const httpsPort = 3001;
-app = express()
-var key  = fs.readFileSync('/home/pi/yourdomain.key');
-var cert = fs.readFileSync('/home/pi/yourdomain.csr');
-//var key = fs.readFileSync(__dirname + '/certsFiles/selfsigned.key');
-//var cert = fs.readFileSync(__dirname + '/certsFiles/selfsigned.crt');
+var express = require('express')
+var fs = require('fs')
+var https = require('https')
+var app = express()
 
-var credentials = {
-  key: key,
-  cert: cert
-};
+app.get('/', function(req, res) {
+    res.send('hello world')
+})
 
-//GET home route
-app.get('/', (req, res) => {
-   res.send('Hello World.');
-});
-
-var httpServer = http.createServer(app);
-var httpsServer = https.createServer(credentials, app);
-
-
-httpServer.listen(httpPort, () => {
-  console.log("Http server listing on port : " + httpPort)
-});
-
-httpsServer.listen(httpsPort, () => {
-  console.log("Https server listing on port : " + httpsPort)
-});
+https.createServer({
+        key: fs.readFileSync('/home/pi/server.key'),
+        cert: fs.readFileSync('/home/pi/server.cert')
+    }, app)
+    .listen(80, function() {
+        console.log('Example app listening on port 80! Go to https://localhost:3000/')
+    })

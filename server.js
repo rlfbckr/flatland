@@ -5,7 +5,11 @@
    platform collaborative generative practices
 
 */
+
+
+
 const https = require('https');
+var http = require('http');
 const fs = require('fs');
 var ip = require("ip");
 console.log("FLATLAND server !");
@@ -15,10 +19,30 @@ console.log("serverIP : " + ip.address());
 var express = require('express');
 var app = express();
 app.use(express.static('public'));
-var server = app.listen(80,'0.0.0.0');
+
+var server = http.createServer(app);
+const privateKey = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/privkey.pem', 'utf8');
+const certificate = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/cert.pem', 'utf8');
+const ca = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/chain.pem', 'utf8');
+
+var serverSecure = https.createServer({
+    key: privateKey,
+    cert: certificate,
+    ca: ca
+}, app);
+
+server.listen(80, () => {
+    console.log('HTTP Server running on port 80');
+});
+
+serverSecure.listen(443, () => {
+    console.log('HTTPS Server running on port 443');
+});
+
+
 
 var socket = require('socket.io');
-var io = socket(server);
+var io = socket(serverSecure);
 io.sockets.on('connection', newConnection);
 
 function newConnection(socket) {

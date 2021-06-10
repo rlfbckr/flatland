@@ -38,10 +38,10 @@ class Machine extends defaultMachine {
         this.rotationspeed = random(-0.05, 0.05);
         this.speed = 10;
         this.velocity = createVector(random(-5, 5), random(-5, 5));
-        this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2]);
+
     }
     move() {
-
+        this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2]);
         // local bounce
         for (let i = 0; i < flatland.machinesLocal.length; i++) {
             if (this != flatland.machinesLocal[i]) {
@@ -145,6 +145,8 @@ function initGui() {
 
     let guiFlatlandFolder = gui.addFolder('flatlandConfig');
     guiFlatlandFolder.add(flatlandConfig, 'server');
+    guiFlatlandFolder.add(flatlandConfig, 'land');
+    guiFlatlandFolder.add(flatlandConfig, 'updateIntervall',1,100);
     guiFlatlandFolder.add(flatlandConfig, 'debug');
     guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
     guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);

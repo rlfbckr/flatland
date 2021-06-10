@@ -1,5 +1,5 @@
-const _VERSION = "v0.03";
-//const updateIntervall = 10; // 10 times per second
+const _VERSION = "v0.04";
+
 const MachineType = {
     NONE: 0,
     CIRCLE: 1,
@@ -99,8 +99,10 @@ class Flatland {
                 'fps      : ' + frameRate() + '\n' +
                 'myID     : ' + socket.id + '\n' +
                 '#local   : ' + this.machineCountLocal() + "\n" +
-                '#remote  : ' + this.machineCountRemote() + "\n";
-            'pendown  : ' + machineConfig.pendown;
+                '#remote  : ' + this.machineCountRemote() + "\n"+
+                'pendown  : ' + machineConfig.pendown+ "\n"+
+                '\n'+
+                'press <d> to toggle debug mode';
             this.overlayCanvas.clear();
             this.overlayCanvas.fill(0);
             this.overlayCanvas.noStroke();
@@ -458,7 +460,7 @@ class defaultMachine {
     display() {
         if (this.isAlive()) {
             this._displayMachine();
-            fill(0, 255, 0);
+            fill(127, 127, 127);
             if (this.local == true) {
                 if (flatlandConfig.debug) {
                     text("LOCAL:\n" + socket.id + "\n" + this.machineid + "\n" + this.pos.x + " " + this.pos.y, this.pos.x, this.pos.y);

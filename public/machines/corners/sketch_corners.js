@@ -6,7 +6,7 @@ var flatlandConfig = {
 
     server: "https://flatland.earth",
     land: 'default',
-    updateIntervall: 10,
+    updateIntervall: 40,
     debug: true,
     clearscreen: false,
     backgroundcolor: [255, 255, 255],

@@ -10,7 +10,7 @@ var flatlandConfig = {
     debug: false,
     clearscreen: true,
     backgroundcolor: [255, 255, 255],
-    backgroundblend: 0.5
+    backgroundblend: 0.02
 }
 
 var machineConfig = {
@@ -36,15 +36,19 @@ class Machine extends defaultMachine {
         this.type = MachineType.POINT;
         this.pos.x = random(-width / 2, width / 2);
         this.pos.y = random(-height / 2, height / 2);
+
+        this.target = points[mapper];
+ 
+        mapper = (mapper+1)%points.length;
     //    this.size = random(50,90);
     }
     move() {
-        if (this.id >= 0 && this.id < points.length) {
-            this.pos.x = (this.pos.x * 0.97) + (points[this.id].x * 0.03);
-            this.pos.y = (this.pos.y * 0.97) + (points[this.id].y * 0.03);
-        }
-        var d = dist(this.pos.x,this.pos.y,points[this.id].x,points[this.id].y);
-        this.size= map(d,width/2,0,400,5);
+       
+            this.pos.x = (this.pos.x * 0.97) + (this.target.x * 0.03);
+            this.pos.y = (this.pos.y * 0.97) + (this.target.y * 0.03);
+       
+        var d = dist(this.pos.x,this.pos.y,this.target.x,this.target.y);
+        this.size= map(d,width/2,0,200,5);
 
         // how does your machine move 
     }
@@ -64,12 +68,26 @@ let flatland;
 let typo;
 let points;
 let bounds;
+let mapper = 0;
 function preload() {
     typo = loadFont('../../assets/fonts/RobotoMono-Regular.otf');
 }
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
+    textAlign(CENTER, CENTER);
+    points = typo.textToPoints('flatland', 0, 0, 200, {
+        sampleFactor: 0.04,
+        simplifyThreshold: 0
+    });
+
+    for (let i = 0; i < points.length; i++) {
+        points[i].x = points[i].x - width/3;
+        points[i].y = points[i].y;
+
+    }
+
+    machineConfig.maxCount = points.length;
     flatland = new Flatland(); // connect to the flatland server
     initGui();
     frameRate(100);
@@ -77,19 +95,7 @@ function setup() {
     gravitation = createVector(0, 0);
 
 
-    textAlign(CENTER, CENTER);
-    points = typo.textToPoints('flat!', 0, 0, 0, {
-        sampleFactor: 0.8,
-        simplifyThreshold: 0
-    });
 
-    for (let i = 0; i < points.length; i++) {
-        points[i].x = points[i].x*20 - width/3;
-        points[i].y = points[i].y*20;
-
-    }
-
-    machineConfig.maxCount = points.length;
 
     //textFont(typo);
     //textSize(100);

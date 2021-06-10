@@ -1,5 +1,5 @@
 /*
-   empty machine example
+   mouse control + sound
 */
 
 var flatlandConfig = {

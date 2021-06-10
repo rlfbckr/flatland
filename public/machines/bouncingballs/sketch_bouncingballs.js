@@ -64,6 +64,7 @@ class Machine extends defaultMachine {
 
         }
         // remote bounce
+/*
         for (let i = 0; i < flatland.machinesRemote.length; i++) {
             let distance = dist(this.pos.x, this.pos.y, flatland.machinesRemote[i].pos.x, flatland.machinesRemote[i].pos.y);
             let minimale_distance = ((this.size / 2) + (flatland.machinesRemote[i].size / 2));
@@ -76,7 +77,7 @@ class Machine extends defaultMachine {
             }
 
         }
-
+*/
 
         // how does your machine move 
         /*

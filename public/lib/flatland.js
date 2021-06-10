@@ -1,4 +1,4 @@
-const _VERSION = "v0.04";
+const _VERSION = "v0.05";
 
 /*
 TODO
@@ -9,13 +9,14 @@ TODO
 [x] rectangle ????? checken
 [x] typography example
 [x] sound example
+[x] multi land möglichkeite
+[x] beispiel zusammenhänge objekte (job für ralf)
+[x] pendown??? checken
+[ ] network sound
+[ ] ]installations tutorial
+[ ] ]linien (vektoren) zwischen zwei bots ?
+[ ]] interaction collision example 
 
-- interaction collision example 
-- beispiel zusammenhänge objekte (job für ralf)
-- pendown??? checken
-- installations tutorial
-- linien (vektoren) zwischen zwei bots ?
-- multi land möglichkeite
 
 
 
@@ -121,9 +122,9 @@ class Flatland {
                 'fps      : ' + frameRate() + '\n' +
                 'myID     : ' + socket.id + '\n' +
                 '#local   : ' + this.machineCountLocal() + "\n" +
-                '#remote  : ' + this.machineCountRemote() + "\n"+
-                'pendown  : ' + machineConfig.pendown+ "\n"+
-                '\n'+
+                '#remote  : ' + this.machineCountRemote() + "\n" +
+                'pendown  : ' + machineConfig.pendown + "\n" +
+                '\n' +
                 'press <d> to toggle debug mode';
             this.overlayCanvas.clear();
             this.overlayCanvas.fill(0);
@@ -147,26 +148,28 @@ class Flatland {
     }
 
     updateRemoteMachines(data) {
-        if (data.socketid == socket.id) return; // my own machines
-        if (this.machinesRemote[data.machineid] && this.machinesRemote[data.machineid].isAlive()) {
-            this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
-            this.machinesRemote[data.machineid].setColor1(data.color1);
-            this.machinesRemote[data.machineid].setColor2(data.color2);
-            this.machinesRemote[data.machineid].setRotation(data.rotation);
-            this.machinesRemote[data.machineid].setPen(data.pendown);
-            this.machinesRemote[data.machineid].setType(data.type);
+        if (data.socketid == socket.id) return; // my own machines; do nothing 
+        if (data.land == flatlandConfig.land) {
+            if (this.machinesRemote[data.machineid] && this.machinesRemote[data.machineid].isAlive()) {
+                this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
+                this.machinesRemote[data.machineid].setColor1(data.color1);
+                this.machinesRemote[data.machineid].setColor2(data.color2);
+                this.machinesRemote[data.machineid].setRotation(data.rotation);
+                this.machinesRemote[data.machineid].setPen(data.pendown);
+                this.machinesRemote[data.machineid].setType(data.type);
 
-        } else {
-            //console.log("new");
-            this.machinesRemote[data.machineid] = new Machine(data.machineid, data.pos.x, data.pos.y, data.size, false);
-            this.machinesRemote[data.machineid].setSocketID(data.socketid);
-            this.machinesRemote[data.machineid].setMachineID(data.machineid);
-            //this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
-            this.machinesRemote[data.machineid].setColor1(data.color1);
-            this.machinesRemote[data.machineid].setColor2(data.color2);
-            this.machinesRemote[data.machineid].setRotation(data.rotation);
-            this.machinesRemote[data.machineid].setPen(data.pendown);
+            } else {
+                //console.log("new");
+                this.machinesRemote[data.machineid] = new Machine(data.machineid, data.pos.x, data.pos.y, data.size, false);
+                this.machinesRemote[data.machineid].setSocketID(data.socketid);
+                this.machinesRemote[data.machineid].setMachineID(data.machineid);
+                //this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
+                this.machinesRemote[data.machineid].setColor1(data.color1);
+                this.machinesRemote[data.machineid].setColor2(data.color2);
+                this.machinesRemote[data.machineid].setRotation(data.rotation);
+                this.machinesRemote[data.machineid].setPen(data.pendown);
 
+            }
         }
     }
 
@@ -295,6 +298,7 @@ class defaultMachine {
     }
     setColor1(_c) {
         this.color1 = color(_c.r, _c.g, _c.b, _c.a);
+
     }
     setColor2(_c) {
         this.color2 = color(_c.r, _c.g, _c.b, _c.a);
@@ -369,6 +373,7 @@ class defaultMachine {
                 this.lastsend = millis();
                 //send my machine data to server
                 var data = {
+                    land: flatlandConfig.land,
                     pos: {
                         'x': this.pos.x,
                         'y': this.pos.y
@@ -379,20 +384,23 @@ class defaultMachine {
                         'r': this.color1.levels[0],
                         'g': this.color1.levels[1],
                         'b': this.color1.levels[2],
-                        'a': this.color1.levels[3]
+                        'a':  this.color1Opacity*255,
                     },
+                  //  color1Opacity: this.color1Opacity,
                     color2: {
                         'r': this.color2.levels[0],
                         'g': this.color2.levels[1],
                         'b': this.color2.levels[2],
-                        'a': this.color2.levels[3]
+                        'a': this.color2Opacity*255,
                     },
+                  //  color2Opacity: this.color2Opacity,
                     socketid: this.socketid,
                     age: this.age(),
                     rotation: this.rotation,
                     machineid: this.machineid,
                     pendown: this.pendown,
                 }
+
                 socket.emit('machine', data);
             }
         }
@@ -451,7 +459,7 @@ class defaultMachine {
         // fill(128, 255, 128);
         fill(this.color1);
         stroke(this.color2)
-            //console.log(this.type);
+        //console.log(this.type);
         if (this.type == MachineType.LINE) {
             strokeWeight(this.size);
             point(this.pos.x, this.pos.y)
@@ -483,23 +491,23 @@ class defaultMachine {
     display() {
         if (this.isAlive()) {
             this._displayMachine();
-      /*
-            if (this.local == true) {
-                if (flatlandConfig.debug) {
-                    fill(127, 127, 127);
-                    text("LOCAL:\n" + socket.id + "\n" + this.machineid + "\n" + this.pos.x + " " + this.pos.y, this.pos.x, this.pos.y);
-                }
-
-            } else {
-
-
-                if (flatlandConfig.debug) {
-                    fill(127, 127, 127);
-                    text("REMOTE\n: " + this.socketid + "\n" + this.machineid, this.pos.x, this.pos.y);
-                }
-
-            }
-            */
+            /*
+                  if (this.local == true) {
+                      if (flatlandConfig.debug) {
+                          fill(127, 127, 127);
+                          text("LOCAL:\n" + socket.id + "\n" + this.machineid + "\n" + this.pos.x + " " + this.pos.y, this.pos.x, this.pos.y);
+                      }
+      
+                  } else {
+      
+      
+                      if (flatlandConfig.debug) {
+                          fill(127, 127, 127);
+                          text("REMOTE\n: " + this.socketid + "\n" + this.machineid, this.pos.x, this.pos.y);
+                      }
+      
+                  }
+                  */
         }
     }
 

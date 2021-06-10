@@ -21,8 +21,8 @@ var machineConfig = {
     lifetime: 6000,
     color1: [0, 0, 0],
     color1Opacity: 0.5,
-    color2: [0, 255, 255],
-    color2Opacity: 0.1,
+    color2: [0, 0, 0],
+    color2Opacity: 0.2,
     pendown: true
 
 }
@@ -33,26 +33,19 @@ var machineConfig = {
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine
-        this.type = MachineType.CIRCLE;
+        this.type = MachineType.POINT;
         this.pos.x = random(-width / 2, width / 2);
         this.pos.y = random(-height / 2, height / 2);
-        this.size = 10;
+    //    this.size = random(50,90);
     }
     move() {
         if (this.id >= 0 && this.id < points.length) {
-            this.pos.x = (this.pos.x * 0.95) + (points[this.id].x * 0.05);
-            this.pos.y = (this.pos.y * 0.95) + (points[this.id].y * 0.05);
+            this.pos.x = (this.pos.x * 0.97) + (points[this.id].x * 0.03);
+            this.pos.y = (this.pos.y * 0.97) + (points[this.id].y * 0.03);
         }
-        /*
-                for (remotemachine of flatland.machinesRemote) {
-                    if (dist(this.pos.x, this.pos.y, remotemachine.pos.x, remotemachine.pos.y) < 100) {
-                        // mir kommt ein fremder bot zu nahme. ich haue ab
-                        this.pos.x = this.pos.x + random(-100, 100);
-                        this.pos.y = this.pos.y + random(-100, 100);
-                    }
-        
-                }
-                */
+        var d = dist(this.pos.x,this.pos.y,points[this.id].x,points[this.id].y);
+        this.size= map(d,width/2,0,400,5);
+
         // how does your machine move 
     }
 }

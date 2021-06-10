@@ -459,6 +459,7 @@ class defaultMachine {
 
         if (this.type == MachineType.POINT) {
             stroke(this.color2)
+            strokeWeight(this.size);
             point(this.pos.x, this.pos.y)
         }
         if (this.type == MachineType.CIRCLE) {
@@ -482,9 +483,10 @@ class defaultMachine {
     display() {
         if (this.isAlive()) {
             this._displayMachine();
-            fill(127, 127, 127);
+      /*
             if (this.local == true) {
                 if (flatlandConfig.debug) {
+                    fill(127, 127, 127);
                     text("LOCAL:\n" + socket.id + "\n" + this.machineid + "\n" + this.pos.x + " " + this.pos.y, this.pos.x, this.pos.y);
                 }
 
@@ -492,10 +494,12 @@ class defaultMachine {
 
 
                 if (flatlandConfig.debug) {
+                    fill(127, 127, 127);
                     text("REMOTE\n: " + this.socketid + "\n" + this.machineid, this.pos.x, this.pos.y);
                 }
 
             }
+            */
         }
     }
 

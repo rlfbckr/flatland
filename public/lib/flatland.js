@@ -209,10 +209,12 @@ class defaultMachine {
         this.rotation = random(PI);
         this.lastupdate = millis();
         this.audio = false;
-        this.osc, this.playing, this.freq, this.amp;
-        this.freq =440;
-        this.amp = 0.2;
 
+        this.osc, this.playing, this.freq, this.amp;
+        this.freq = 440;
+        this.amp = 0.2;
+        this.pan = 0;
+        this.phase = 0;
         // this.pendown = false;
         this.type = MachineType.CIRCLE;
         this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
@@ -227,27 +229,28 @@ class defaultMachine {
     }
 
     stop() {
-        this.osc.amp(0,1.0);
+        this.osc.amp(0, 1.0);
 
         this.osc.stop(1.0);
     }
     setPhase(_phase) {
         this.osc.phase(_phase);
+        this.phase = _phase;
     }
     setPan(_pan) {
-        this.osc.pan(_pan,0.9);
-
+        this.osc.pan(_pan, 0.9);
+        this.pan = _pan;
     }
     enableAudio() {
         this.osc = new p5.Oscillator('sine');
         this.audio = true;
-        this.osc.freq(1, 0.1);
-        this.osc.amp(0, 1);
+        this.osc.freq(1, 0);
+        this.osc.amp(0, 0);
         this.osc.start();
 
     }
 
-    updateSound(_freq,_amp) {
+    updateSound(_freq, _amp) {
         this.freq = _freq;
         this.amp = _amp;
         this.osc.freq(this.freq, 0.8);
@@ -421,7 +424,7 @@ class defaultMachine {
         // fill(128, 255, 128);
         fill(this.color1);
         stroke(this.color2)
-            //console.log(this.type);
+        //console.log(this.type);
         if (this.type == MachineType.LINE) {
             strokeWeight(this.size);
             point(this.pos.x, this.pos.y)

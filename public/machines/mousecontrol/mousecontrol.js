@@ -24,7 +24,6 @@ var machineConfig = {
     color2: [0, 255, 255],
     color2Opacity: 0.1,
     pendown: true
-
 }
 
 
@@ -35,8 +34,8 @@ class Machine extends defaultMachine {
         // initialize your machine
         this.type = MachineType.CIRCLE;
         this.angle = random(PI*2);
-        this.radius = random(50,(height/2)*0.7);
-        this.speed = random(-0.1,0.1);
+        this.radius = random(50,(height/2.0)*0.7);
+        this.speed = random(-0.09,0.09);
         this.freq= 1;
         this.amp = 0;
 
@@ -50,15 +49,14 @@ class Machine extends defaultMachine {
     move() {
         this.angle+=this.speed;
         this.size = map(this.getLifetime(),0,1.0,60,0);
-        var tmpr = this.radius+(sin(millis()*0.0001)*200);
+        var tmpr = this.radius+(sin(millis()*0.001)*100);
         this.pos.x=mouseX-(width/2)+(cos(this.angle)*tmpr);
         this.pos.y=mouseY-(height/2)+(sin(this.angle)*tmpr);
         if ((millis()-this.lastaudioupdate)> 100) {
             this.setPan(constrain(map(this.pos.x,-width/2,width/2,-1.0,1.0),-1,1));
             this.updateSound(
-                map(this.speed,-0.1,0.1,50,600),
-            
-                map(this.getLifetime(),0.0,1.0,0.15,0)
+                map(this.speed,-0.1,0.1,50,2600),            
+                map(this.getLifetime(),0.0,1.0,(1.0/machineConfig.maxCount)*0.5,0)
                 );
             this.lastaudioupdate = millis();
         }

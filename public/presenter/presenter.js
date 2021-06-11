@@ -4,7 +4,7 @@
 
 var flatlandConfig = {
     // server: "http://localhost:3000",
-    server: "http://flatland.earth",
+    server: "https://flatland.earth",
     land: 'default',
     debug: false,
     presenter: true,

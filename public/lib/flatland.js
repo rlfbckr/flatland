@@ -12,6 +12,7 @@ TODO
 [x] multi land möglichkeite
 [x] beispiel zusammenhänge objekte (job für ralf)
 [x] pendown??? checken
+
 [ ] rotation of rects???
 [ ] typograhy als form
 [ ] better spawn logic / spawn speed
@@ -154,7 +155,7 @@ class Flatland {
 
     updateRemoteMachines(data) {
         if (data.socketid == socket.id) return; // my own machines; do nothing 
-        if (data.land != flatlandConfig.land) return; // refuse all non landers
+        if (data.land != flatlandConfig.land) return; // refuse all outlanders
         if (this.machinesRemote[data.machineid] && this.machinesRemote[data.machineid].isAlive()) {
             //update 
             this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);

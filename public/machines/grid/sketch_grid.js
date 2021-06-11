@@ -1,29 +1,28 @@
 /*
-   empty machine example
+   global grid example
 */
 
 var flatlandConfig = {
     server: "https://flatland.earth",
     land: 'default',
-    updateIntervall: 40,
-    debug: true,
+    updateIntervall: 30,
+    debug: false,
     clearscreen: true,
     backgroundcolor: [255, 255, 255],
     backgroundblend: 0.5
 }
 
 var machineConfig = {
-    name: 'forms',
+    name: 'grid',
     maxCount: 10,
     minSize: 20,
     maxSize: 30,
-    lifetime: 20000000,
+    lifetime: 1000000, // forever...!
     color1: [255, 0, 255],
     color1Opacity: 0.1,
     color2: [0, 255, 255],
     color2Opacity: 0.1,
-    pendown: true
-
+    pendown: false
 }
 
 
@@ -41,7 +40,7 @@ class Machine extends defaultMachine {
         this.myownrandomradius = random(20, 60);
         this.myownvariable_centerx = grid[order].x;
         this.myownvariable_centery = grid[order].y;
-        order++;
+        order = (order + 1) % grid.length;
     }
     move() {
         // how does your machine move 
@@ -53,23 +52,18 @@ class Machine extends defaultMachine {
 
 
 
-
-
-
-
-
-//let socket
 let gui;
 let flatland;
 
-// own gloaal variables
+// my own  gloabal variables
 let order = 0;
-var grid = [];
+let grid = [];
+let maxpoints = 8; // wieviele punkte
+let margin = 200; // wieviel rand (open, unten, rechts, links)
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
-    let maxpoints = 8; // wieviele punkte
-    let margin = 200; // wieviel rand (open, unten, rechts, links)
+
     for (var y = 0; y < maxpoints; y++) { // für jede zeile
         for (var x = 0; x < maxpoints; x++) { // für jede spalte
             var v = createVector(
@@ -81,53 +75,13 @@ function setup() {
         }
     }
     machineConfig.maxCount = grid.length;
+
     flatland = new Flatland(); // connect to the flatland server
     initGui();
-    frameRate(100);
     initSocketIO(flatlandConfig.server);
-
-
 }
-
 
 function draw() {
     flatland.update(); // update + draw flatland
-
 }
 
-
-
-function initGui() {
-    gui = new dat.GUI();
-
-    let guiFlatlandFolder = gui.addFolder('flatlandConfig');
-    guiFlatlandFolder.add(flatlandConfig, 'server');
-    selectLand = guiFlatlandFolder.add(flatlandConfig, 'land', allLands);
-    guiFlatlandFolder.add(flatlandConfig, 'debug');
-    guiFlatlandFolder.add(flatlandConfig, 'updateIntervall', 1, 250);
-    guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
-    guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);
-    guiFlatlandFolder.add(flatlandConfig, 'clearscreen');
-    guiFlatlandFolder.open();
-
-    let guiMachineFolder = gui.addFolder("machineConfig");
-
-    guiMachineFolder.add(machineConfig, 'name');
-    guiMachineFolder.add(machineConfig, 'maxCount', 1, 100);
-    guiMachineFolder.add(machineConfig, "minSize", 1, 200);
-    guiMachineFolder.add(machineConfig, "maxSize", 1, 200);
-    guiMachineFolder.add(machineConfig, "lifetime", 1, 20000);
-    guiMachineFolder.addColor(machineConfig, 'color1');
-    guiMachineFolder.add(machineConfig, 'color1Opacity', 0, 1);
-    guiMachineFolder.addColor(machineConfig, 'color2');
-    guiMachineFolder.add(machineConfig, 'color2Opacity', 0.0, 1.0);
-    guiMachineFolder.add(machineConfig, 'pendown');
-    guiMachineFolder.open();
-}
-
-/*
-make p5js responsive 
-*/
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
-}

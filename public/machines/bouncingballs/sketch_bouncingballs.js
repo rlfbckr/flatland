@@ -1,9 +1,8 @@
 /*
-   Brownian.dot Machine Demo
+   bouncing balls
 */
 
 var flatlandConfig = {
-    // server: "http://localhost:3000",
     server: "https://flatland.earth",
     land: 'default',
     updateIntervall: 40,
@@ -23,12 +22,10 @@ var machineConfig = {
     color1Opacity: 0.1,
     color2: [0, 255, 255],
     color2Opacity: 0.1,
-    pendown: true
+    pendown: false
 }
 
-let gravitation;
-let friction = 0.7;
-let lastspawn = 0;
+
 
 class Machine extends defaultMachine {
     setup() {
@@ -113,65 +110,22 @@ class Machine extends defaultMachine {
 
 }
 // --------------------------------------------------------------
-//let socket
 let gui;
 let flatland;
-
-// let osc, playing, freq, amp;
+let gravitation;
+let friction = 0.7;
+let lastspawn = 0;
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     flatland = new Flatland(); // connect to the flatland server
     initGui();
-    frameRate(100);
     initSocketIO(flatlandConfig.server);
-    gravitation = createVector(0, 0);
-    /*
-    osc = new p5.Oscillator('sine');
-    osc.start();
-    osc.freq(freq, 0.1);
-    osc.amp(amp, 0.6);
-    */
+    gravitation = createVector(0, -0);
+  
 }
 
 
 function draw() {
     flatland.update(); // update + draw flatland
-}
-
-
-
-function initGui() {
-    gui = new dat.GUI();
-
-    let guiFlatlandFolder = gui.addFolder('flatlandConfig');
-    guiFlatlandFolder.add(flatlandConfig, 'server');
-    guiFlatlandFolder.add(flatlandConfig, 'land');
-    guiFlatlandFolder.add(flatlandConfig, 'updateIntervall',1,100);
-    guiFlatlandFolder.add(flatlandConfig, 'debug');
-    guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
-    guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);
-    guiFlatlandFolder.add(flatlandConfig, 'clearscreen');
-    guiFlatlandFolder.open();
-
-    let guiMachineFolder = gui.addFolder("machineConfig");
-
-    guiMachineFolder.add(machineConfig, 'name');
-    guiMachineFolder.add(machineConfig, 'maxCount', 1, 100);
-    guiMachineFolder.add(machineConfig, "minSize", 1, 200);
-    guiMachineFolder.add(machineConfig, "maxSize", 1, 200);
-    guiMachineFolder.add(machineConfig, "lifetime", 1, 20000);
-    guiMachineFolder.addColor(machineConfig, 'color1');
-    guiMachineFolder.add(machineConfig, 'color1Opacity', 0, 1);
-    guiMachineFolder.addColor(machineConfig, 'color2');
-    guiMachineFolder.add(machineConfig, 'color2Opacity', 0.0, 1.0);
-    guiMachineFolder.add(machineConfig, 'pendown');
-    guiMachineFolder.open();
-}
-
-/*
-make p5js responsive 
-*/
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
 }

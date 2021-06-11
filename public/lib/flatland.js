@@ -147,14 +147,14 @@ class Flatland {
     drawDebugInformation() {
         if (flatlandConfig.debug) {
             var _debugmessage_ = 'debug\n' +
-                '-------------------------------------\n' +
+                '----------------------------------\n' +
                 'version  : ' + _VERSION + '\n' +
                 'fps      : ' + frameRate() + '\n' +
                 'myID     : ' + socket.id + '\n' +
                 '#local   : ' + this.machineCountLocal() + "\n" +
                 '#remote  : ' + this.machineCountRemote() + "\n" +
                 'pendown  : ' + machineConfig.pendown + "\n" +
-                'lands    : '+ allLands.join(" ")+'\n'+
+             //   'lands    : '+ allLands.join(" ")+'\n'+
                 '\n' +
                 'press <d> to toggle debug mode';
             this.overlayCanvas.clear();
@@ -242,7 +242,7 @@ class Flatland {
                 for (var key in this.machinesRemote) {
                     this.machinesRemote[key].display();
                 }
-                */
+        */
         this.drawDebugInformation();
     }
 
@@ -270,7 +270,7 @@ class defaultMachine {
         this.pos = createVector(_x, _y);
         this.posPrevious = createVector(this.pos.x, this.pos.y);
         this.size = _size;
-        this.rotation = random(PI);
+        this.rotation = 0;
         this.lastupdate = millis();
         this.audio = false;
 
@@ -563,4 +563,39 @@ function updateDatDropdown(target, list){
         }
     }
     if (innerHTMLStr != "") target.domElement.children[0].innerHTML = innerHTMLStr;
+}
+
+/*
+make p5js responsive 
+*/
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+}
+
+function initGui() {
+    gui = new dat.GUI();
+
+    let guiFlatlandFolder = gui.addFolder('flatlandConfig');
+    guiFlatlandFolder.add(flatlandConfig, 'server');
+    selectLand = guiFlatlandFolder.add(flatlandConfig, 'land', allLands);
+    guiFlatlandFolder.add(flatlandConfig, 'debug');
+    guiFlatlandFolder.add(flatlandConfig, 'updateIntervall', 1, 250);
+    guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
+    guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);
+    guiFlatlandFolder.add(flatlandConfig, 'clearscreen');
+    guiFlatlandFolder.open();
+
+    let guiMachineFolder = gui.addFolder("machineConfig");
+
+    guiMachineFolder.add(machineConfig, 'name');
+    guiMachineFolder.add(machineConfig, 'maxCount', 1, 100);
+    guiMachineFolder.add(machineConfig, "minSize", 1, 200);
+    guiMachineFolder.add(machineConfig, "maxSize", 1, 200);
+    guiMachineFolder.add(machineConfig, "lifetime", 1, 20000);
+    guiMachineFolder.addColor(machineConfig, 'color1');
+    guiMachineFolder.add(machineConfig, 'color1Opacity', 0, 1);
+    guiMachineFolder.addColor(machineConfig, 'color2');
+    guiMachineFolder.add(machineConfig, 'color2Opacity', 0.0, 1.0);
+    guiMachineFolder.add(machineConfig, 'pendown');
+    guiMachineFolder.open();
 }

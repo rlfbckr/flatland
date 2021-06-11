@@ -154,28 +154,30 @@ class Flatland {
 
     updateRemoteMachines(data) {
         if (data.socketid == socket.id) return; // my own machines; do nothing 
-        if (data.land == flatlandConfig.land) {
-            if (this.machinesRemote[data.machineid] && this.machinesRemote[data.machineid].isAlive()) {
-                this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
-                this.machinesRemote[data.machineid].setColor1(data.color1);
-                this.machinesRemote[data.machineid].setColor2(data.color2);
-                this.machinesRemote[data.machineid].setRotation(data.rotation);
-                this.machinesRemote[data.machineid].setPen(data.pendown);
-                this.machinesRemote[data.machineid].setType(data.type);
+        if (data.land != flatlandConfig.land) return; // refuse all non landers
+        if (this.machinesRemote[data.machineid] && this.machinesRemote[data.machineid].isAlive()) {
+            //update 
+            this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
+            this.machinesRemote[data.machineid].setColor1(data.color1);
+            this.machinesRemote[data.machineid].setColor2(data.color2);
+            this.machinesRemote[data.machineid].setRotation(data.rotation);
+            this.machinesRemote[data.machineid].setPen(data.pendown);
+            this.machinesRemote[data.machineid].setType(data.type);
 
-            } else {
-                //console.log("new");
-                this.machinesRemote[data.machineid] = new Machine(data.machineid, data.pos.x, data.pos.y, data.size, false);
-                this.machinesRemote[data.machineid].setSocketID(data.socketid);
-                this.machinesRemote[data.machineid].setMachineID(data.machineid);
-                //this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
-                this.machinesRemote[data.machineid].setColor1(data.color1);
-                this.machinesRemote[data.machineid].setColor2(data.color2);
-                this.machinesRemote[data.machineid].setRotation(data.rotation);
-                this.machinesRemote[data.machineid].setPen(data.pendown);
+        } else {
+            // new
+            //console.log("new");
+            this.machinesRemote[data.machineid] = new Machine(data.machineid, data.pos.x, data.pos.y, data.size, false);
+            this.machinesRemote[data.machineid].setSocketID(data.socketid);
+            this.machinesRemote[data.machineid].setMachineID(data.machineid);
+            //this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
+            this.machinesRemote[data.machineid].setColor1(data.color1);
+            this.machinesRemote[data.machineid].setColor2(data.color2);
+            this.machinesRemote[data.machineid].setRotation(data.rotation);
+            this.machinesRemote[data.machineid].setPen(data.pendown);
 
-            }
         }
+
     }
 
     update() {
@@ -199,7 +201,7 @@ class Flatland {
                     this.machinesLocal[i].update(i);
                     this.machinesLocal[i].display();
                 }
-                 this.sendeven = !this.sendeven;
+                this.sendeven = !this.sendeven;
             }
         }
         for (var key in this.machinesRemote) {
@@ -375,7 +377,7 @@ class defaultMachine {
             });
 
         } else {
-            if (((this.id % 2) == flatland.sendeven) && (millis() - this.lastsend) > flatlandConfig.updateIntervall) {
+            if ((millis() - this.lastsend) > flatlandConfig.updateIntervall) {
                 this.lastsend = millis();
                 //send my machine data to server
                 var data = {
@@ -390,16 +392,16 @@ class defaultMachine {
                         'r': this.color1.levels[0],
                         'g': this.color1.levels[1],
                         'b': this.color1.levels[2],
-                        'a':  this.color1Opacity*255,
+                        'a': this.color1Opacity * 255,
                     },
-                  //  color1Opacity: this.color1Opacity,
+                    //  color1Opacity: this.color1Opacity,
                     color2: {
                         'r': this.color2.levels[0],
                         'g': this.color2.levels[1],
                         'b': this.color2.levels[2],
-                        'a': this.color2Opacity*255,
+                        'a': this.color2Opacity * 255,
                     },
-                  //  color2Opacity: this.color2Opacity,
+                    //  color2Opacity: this.color2Opacity,
                     socketid: this.socketid,
                     age: this.age(),
                     rotation: this.rotation,

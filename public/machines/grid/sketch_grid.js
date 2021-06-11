@@ -3,26 +3,25 @@
 */
 
 var flatlandConfig = {
-    // server: "http://localhost:3000",
     server: "https://flatland.earth",
     land: 'default',
     updateIntervall: 40,
-    debug: false,
+    debug: true,
     clearscreen: true,
     backgroundcolor: [255, 255, 255],
-    backgroundblend: 0.02
+    backgroundblend: 0.5
 }
 
 var machineConfig = {
-    name: 'empty-machine-example',
+    name: 'forms',
     maxCount: 10,
     minSize: 20,
     maxSize: 30,
-    lifetime: 6000,
-    color1: [0, 0, 0],
-    color1Opacity: 0.5,
-    color2: [0, 0, 0],
-    color2Opacity: 0.2,
+    lifetime: 20000000,
+    color1: [255, 0, 255],
+    color1Opacity: 0.1,
+    color2: [0, 255, 255],
+    color2Opacity: 0.1,
     pendown: true
 
 }
@@ -34,20 +33,20 @@ class Machine extends defaultMachine {
     setup() {
         // initialize your machine
         this.type = MachineType.POINT;
-        this.pos.x = random(-width / 2, width / 2);
-        this.pos.y = random(-height / 2, height / 2);
-
-        this.target = points[mapper];
-
-        mapper = (mapper + 1) % points.length;
-        //    this.size = random(50,90);
+        this.size = random(30, 100);
+        // this.rad = random(10, 300);
+        this.color2 = color(random(255), random(255), random(255));
+        //this.penDown();
+        this.myown_rotationspeed = random(-0.001,0.001);
+        this.myownrandomradius = random(20, 60);
+        this.myownvariable_centerx = grid[order].x;
+        this.myownvariable_centery = grid[order].y;
+        order++;
     }
     move() {
         // how does your machine move 
-        this.pos.x = (this.pos.x * 0.97) + (this.target.x * 0.03);
-        this.pos.y = (this.pos.y * 0.97) + (this.target.y * 0.03);
-        var d = dist(this.pos.x, this.pos.y, this.target.x, this.target.y);
-        this.size = map(d, width / 2, 0, 200, 5);
+        this.pos.x = this.myownvariable_centerx + cos(millis() * this.myown_rotationspeed) * this.myownrandomradius;
+        this.pos.y = this.myownvariable_centery + sin(millis() * this.myown_rotationspeed) * this.myownrandomradius;
     }
 }
 // --------------------------------------------------------------
@@ -57,51 +56,43 @@ class Machine extends defaultMachine {
 
 
 
-// global p5 stuff
+
 
 //let socket
 let gui;
 let flatland;
-let typo;
-let points;
-let bounds;
-let mapper = 0;
-function preload() {
-    typo = loadFont('../../assets/fonts/RobotoMono-Regular.otf');
-}
+
+// own gloaal variables
+let order = 0;
+var grid = [];
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
-    textAlign(CENTER, CENTER);
-    points = typo.textToPoints('flatland', 0, 0, 200, {
-        sampleFactor: 0.02,
-        simplifyThreshold: 0
-    });
-
-    for (let i = 0; i < points.length; i++) {
-        points[i].x = points[i].x - width / 3;
-        points[i].y = points[i].y;
-
+    let maxpoints = 8; // wieviele punkte
+    let margin = 200; // wieviel rand (open, unten, rechts, links)
+    for (var y = 0; y < maxpoints; y++) { // für jede zeile
+        for (var x = 0; x < maxpoints; x++) { // für jede spalte
+            var v = createVector(
+                map(x, 0, maxpoints - 1, -(width / 2) + margin, (width / 2) - margin),
+                map(y, 0, maxpoints - 1, -(height / 2) + margin, (height / 2) - margin)
+            );
+            console.log(v.x + ' ' + v.y);
+            grid.push(v);
+        }
     }
-
-    machineConfig.maxCount = points.length;
+    machineConfig.maxCount = grid.length;
     flatland = new Flatland(); // connect to the flatland server
     initGui();
     frameRate(100);
     initSocketIO(flatlandConfig.server);
-    gravitation = createVector(0, 0);
 
-
-
-
-    //textFont(typo);
-    //textSize(100);
 
 }
 
 
 function draw() {
     flatland.update(); // update + draw flatland
+
 }
 
 

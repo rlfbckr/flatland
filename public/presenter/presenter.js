@@ -2,11 +2,12 @@
    Brownian.dot Machine Demo
 */
 
+
 var flatlandConfig = {
     // server: "http://localhost:3000",
     server: "https://flatland.earth",
     land: 'default',
-    debug: false,
+    debug: true,
     presenter: true,
     clearscreen: true,
     backgroundcolor: [255, 255, 255],
@@ -49,7 +50,7 @@ function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     flatland = new Flatland(); // connect to the flatland server
     initGui();
-    gui.hide();
+   // gui.hide();
     flatlandConfig.debug = false;
     frameRate(100);
     initSocketIO(flatlandConfig.server);
@@ -68,12 +69,13 @@ function initGui() {
 
     let guiFlatlandFolder = gui.addFolder('flatlandConfig');
     guiFlatlandFolder.add(flatlandConfig, 'server');
+    selectLand = guiFlatlandFolder.add(flatlandConfig, 'land',allLands);
     guiFlatlandFolder.add(flatlandConfig, 'debug');
     guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
     guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);
     guiFlatlandFolder.add(flatlandConfig, 'clearscreen');
     guiFlatlandFolder.open();
-
+    selectLand.setValue(flatlandConfig.land);
 
 }
 
@@ -83,3 +85,5 @@ make p5js responsive
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
+
+

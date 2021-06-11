@@ -77,7 +77,7 @@ function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     textAlign(CENTER, CENTER);
     points = typo.textToPoints('flatland', 0, 0, 200, {
-        sampleFactor: 0.04,
+        sampleFactor: 0.03,
         simplifyThreshold: 0
     });
 
@@ -115,6 +115,7 @@ function initGui() {
 
     let guiFlatlandFolder = gui.addFolder('flatlandConfig');
     guiFlatlandFolder.add(flatlandConfig, 'server');
+    guiFlatlandFolder.add(flatlandConfig, 'land');
     guiFlatlandFolder.add(flatlandConfig, 'debug');
     guiFlatlandFolder.add(flatlandConfig, 'updateIntervall', 1, 250);
     guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');

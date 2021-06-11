@@ -83,7 +83,7 @@ class Flatland {
         this.machinesLocal = [];
         this.machinesRemote = [];
         this.monofont = loadFont('/assets//fonts/RobotoMono-Regular.otf');
-
+        this.sendeven = 1;
         textFont(this.monofont);
         textSize(12);
 
@@ -194,6 +194,7 @@ class Flatland {
                     this.machinesLocal[i].update(i);
                     this.machinesLocal[i].display();
                 }
+                 this.sendeven = !this.sendeven;
             }
         }
         for (var key in this.machinesRemote) {
@@ -369,7 +370,7 @@ class defaultMachine {
             });
 
         } else {
-            if ((millis() - this.lastsend) > flatlandConfig.updateIntervall) {
+            if (((this.id % 2) == flatland.sendeven) && (millis() - this.lastsend) > flatlandConfig.updateIntervall) {
                 this.lastsend = millis();
                 //send my machine data to server
                 var data = {

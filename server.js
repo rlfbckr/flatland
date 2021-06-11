@@ -6,7 +6,7 @@
 
 */
 
-
+var lands = ['default', 'atlantis', 'group1', 'group2', 'group3'];
 
 const https = require('https');
 var http = require('http');
@@ -54,10 +54,17 @@ var io = socket(serverSecure);
 io.sockets.on('connection', newConnection);
 
 function newConnection(socket) {
+    function sendAllLands() {
+        //  console.log("sendAllLands");
+        socket.broadcast.emit("lands", lands);
+    }
+    setInterval(sendAllLands, 5000);
     console.log('new connection ' + socket.id);
     socket.on('disconnet', disconnect);
     socket.on('machine', machineMessage);
     socket.on('removemachine', removeMachine);
+    socket.on('registerland', registerLand);
+    // socket.on('getAllLands', sendAllLands);
 
     function disconnect() {
         console.log('disconnect ' + socket.id);
@@ -70,8 +77,18 @@ function newConnection(socket) {
     }
 
     function removeMachine(data) {
-        console.log("removemachine: " + data.machineid);
+        //console.log("removemachine: " + data.machineid);
         socket.broadcast.emit("removemachine", data);
     }
+
+    function registerLand(data) {
+        console.log("regsiterland: " + data.land);
+        if (lands.indexOf(data.land) == -1) {
+            lands.push(data.land);
+        }
+        console.log(lands);
+        //socket.broadcast.emit("removemachine", data);
+    }
+
 
 }

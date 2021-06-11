@@ -84,6 +84,7 @@ function initGui() {
 
     let guiFlatlandFolder = gui.addFolder('flatlandConfig');
     guiFlatlandFolder.add(flatlandConfig, 'server');
+    guiFlatlandFolder.add(flatlandConfig, 'land');
     guiFlatlandFolder.add(flatlandConfig, 'debug');
     guiFlatlandFolder.add(flatlandConfig, 'updateIntervall', 1, 250);
     guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');

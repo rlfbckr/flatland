@@ -27,8 +27,8 @@ TODO
 
 
 */
-
-
+let allLands = ['default']; // all possible lands
+let selectLand;
 const MachineType = {
     NONE: 0,
     CIRCLE: 1,
@@ -64,7 +64,16 @@ function initSocketIO(_server) {
     socket = io.connect(_server);
     socket.on('updateremotemachines', updateRemoteMachines);
     socket.on('removemachine', removeMachine);
+    socket.on('lands', updateLands);
     console.log('socket.id = ' + socket.id);
+    socket.emit('registerland', {
+        land: flatlandConfig.land
+    });
+
+}
+
+function updateLands(data) {
+    flatland.updateLands(data);
 }
 
 function removeClient(data) {
@@ -86,10 +95,12 @@ class Flatland {
         // this.socket = io.connect(flatlandConfig.server);
         // this.socket.on('updateremotemachines', updateRemoteMachines);
         // this.socket.on('removemachine', removeMachine);
+
         this.machinesLocal = [];
         this.machinesRemote = [];
         this.monofont = loadFont('/assets//fonts/RobotoMono-Regular.otf');
         this.sendeven = 1;
+        
         textFont(this.monofont);
         textSize(12);
 
@@ -102,7 +113,19 @@ class Flatland {
         this.drawingCanvas = createGraphics(windowWidth, windowHeight);
         this.drawingCanvas.background(flatlandConfig.backgroundcolor[0], flatlandConfig.backgroundcolor[1], flatlandConfig.backgroundcolor[2]);
         this.spawn();
+       // this.registerLand(flatlandConfig.land);
 
+    }
+    registerLand(landname) {
+        socket.emit('registerland', {
+            land: landname
+        });
+    }
+    updateLands(data) {
+        allLands = data;
+        updateDatDropdown(selectLand,allLands);
+        selectLand.setValue(flatlandConfig.land);
+     //   updateDropdown('lands' , allLands);
     }
 
     spawn() {
@@ -110,6 +133,7 @@ class Flatland {
             this.machinesLocal.push(new Machine(this.genRandomMachineID(), random(-width / 2, width / 2), random(-height / 2, height / 2), 100, true));
         }
     }
+
 
     clearScreen() {
         background(0, 0, 0);
@@ -123,13 +147,14 @@ class Flatland {
     drawDebugInformation() {
         if (flatlandConfig.debug) {
             var _debugmessage_ = 'debug\n' +
-                '-------------------------------------\n' +
+                '----------------------------------\n' +
                 'version  : ' + _VERSION + '\n' +
                 'fps      : ' + frameRate() + '\n' +
                 'myID     : ' + socket.id + '\n' +
                 '#local   : ' + this.machineCountLocal() + "\n" +
                 '#remote  : ' + this.machineCountRemote() + "\n" +
                 'pendown  : ' + machineConfig.pendown + "\n" +
+             //   'lands    : '+ allLands.join(" ")+'\n'+
                 '\n' +
                 'press <d> to toggle debug mode';
             this.overlayCanvas.clear();
@@ -217,7 +242,7 @@ class Flatland {
                 for (var key in this.machinesRemote) {
                     this.machinesRemote[key].display();
                 }
-                */
+        */
         this.drawDebugInformation();
     }
 
@@ -245,7 +270,7 @@ class defaultMachine {
         this.pos = createVector(_x, _y);
         this.posPrevious = createVector(this.pos.x, this.pos.y);
         this.size = _size;
-        this.rotation = random(PI);
+        this.rotation = 0;
         this.lastupdate = millis();
         this.audio = false;
 
@@ -520,4 +545,57 @@ class defaultMachine {
         }
     }
 
+}
+
+
+function updateDatDropdown(target, list){   
+    innerHTMLStr = "";
+    if(list.constructor.name == 'Array'){
+        for(var i=0; i<list.length; i++){
+            var str = "<option value='" + list[i] + "'>" + list[i] + "</option>";
+            innerHTMLStr += str;        
+        }
+    }
+    if(list.constructor.name == 'Object'){
+        for(var key in list){
+            var str = "<option value='" + list[key] + "'>" + key + "</option>";
+            innerHTMLStr += str;
+        }
+    }
+    if (innerHTMLStr != "") target.domElement.children[0].innerHTML = innerHTMLStr;
+}
+
+/*
+make p5js responsive 
+*/
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
+}
+
+function initGui() {
+    gui = new dat.GUI();
+
+    let guiFlatlandFolder = gui.addFolder('flatlandConfig');
+    guiFlatlandFolder.add(flatlandConfig, 'server');
+    selectLand = guiFlatlandFolder.add(flatlandConfig, 'land', allLands);
+    guiFlatlandFolder.add(flatlandConfig, 'debug');
+    guiFlatlandFolder.add(flatlandConfig, 'updateIntervall', 1, 250);
+    guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
+    guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);
+    guiFlatlandFolder.add(flatlandConfig, 'clearscreen');
+    guiFlatlandFolder.open();
+
+    let guiMachineFolder = gui.addFolder("machineConfig");
+
+    guiMachineFolder.add(machineConfig, 'name');
+    guiMachineFolder.add(machineConfig, 'maxCount', 1, 100);
+    guiMachineFolder.add(machineConfig, "minSize", 1, 200);
+    guiMachineFolder.add(machineConfig, "maxSize", 1, 200);
+    guiMachineFolder.add(machineConfig, "lifetime", 1, 20000);
+    guiMachineFolder.addColor(machineConfig, 'color1');
+    guiMachineFolder.add(machineConfig, 'color1Opacity', 0, 1);
+    guiMachineFolder.addColor(machineConfig, 'color2');
+    guiMachineFolder.add(machineConfig, 'color2Opacity', 0.0, 1.0);
+    guiMachineFolder.add(machineConfig, 'pendown');
+    guiMachineFolder.open();
 }

@@ -17,13 +17,20 @@ console.log("serverIP : " + ip.address());
 
 
 var express = require('express');
-var secure = require('express-force-https');
+//var secure = require('express-force-https');
 var app = express();
 
 app.use(express.static('public'));
-app.use(secure);
+//app.use(secure);
+app.enable('trust proxy')
+    //var server = http.createServer(app);
+    // redirect http -> https
+const server = http.createServer((req, res) => {
+    res.writeHead(301, { Location: `https://${req.headers.host}${req.url}` });
+    res.end();
+});
 
-var server = http.createServer(app);
+
 
 const privateKey = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/privkey.pem', 'utf8');
 const certificate = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/cert.pem', 'utf8');

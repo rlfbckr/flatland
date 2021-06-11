@@ -38,19 +38,16 @@ class Machine extends defaultMachine {
         this.pos.y = random(-height / 2, height / 2);
 
         this.target = points[mapper];
- 
-        mapper = (mapper+1)%points.length;
-    //    this.size = random(50,90);
+
+        mapper = (mapper + 1) % points.length;
+        //    this.size = random(50,90);
     }
     move() {
-       
-            this.pos.x = (this.pos.x * 0.97) + (this.target.x * 0.03);
-            this.pos.y = (this.pos.y * 0.97) + (this.target.y * 0.03);
-       
-        var d = dist(this.pos.x,this.pos.y,this.target.x,this.target.y);
-        this.size= map(d,width/2,0,200,5);
-
         // how does your machine move 
+        this.pos.x = (this.pos.x * 0.97) + (this.target.x * 0.03);
+        this.pos.y = (this.pos.y * 0.97) + (this.target.y * 0.03);
+        var d = dist(this.pos.x, this.pos.y, this.target.x, this.target.y);
+        this.size = map(d, width / 2, 0, 200, 5);
     }
 }
 // --------------------------------------------------------------
@@ -60,7 +57,7 @@ class Machine extends defaultMachine {
 
 
 
-
+// global p5 stuff
 
 //let socket
 let gui;
@@ -77,12 +74,12 @@ function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
     textAlign(CENTER, CENTER);
     points = typo.textToPoints('flatland', 0, 0, 200, {
-        sampleFactor: 0.03,
+        sampleFactor: 0.02,
         simplifyThreshold: 0
     });
 
     for (let i = 0; i < points.length; i++) {
-        points[i].x = points[i].x - width/3;
+        points[i].x = points[i].x - width / 3;
         points[i].y = points[i].y;
 
     }
@@ -105,7 +102,6 @@ function setup() {
 
 function draw() {
     flatland.update(); // update + draw flatland
- 
 }
 
 

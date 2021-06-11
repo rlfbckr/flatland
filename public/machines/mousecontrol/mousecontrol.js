@@ -47,8 +47,10 @@ class Machine extends defaultMachine {
         this.lastaudioupdate = 0;
         this.centerX = 0; //mouse pos
         this.centerY = 0;
-
-
+        // this.setWaveForm(SINE, TRI, RECT,NOISE)
+        // this.setPhase(-1,1)
+        // this.updateSound(frequenz, amplitude);
+        // this.setPan(-1 - 1) 
     }
     move() {
  
@@ -61,7 +63,7 @@ class Machine extends defaultMachine {
             this.setPan(constrain(map(this.pos.x, -width / 2, width / 2, -1.0, 1.0), -1, 1));
             this.updateSound(
                 map(this.speed, -0.1, 0.1, 50, 2600),
-                map(this.getLifetime(), 0.0, 1.0, (1.0 / machineConfig.maxCount) * 0.5, 0)
+              map(this.getLifetime(), 0.0, 1.0, (1.0 / machineConfig.maxCount) * 0.1, 0)
             );
             this.lastaudioupdate = millis();
         }

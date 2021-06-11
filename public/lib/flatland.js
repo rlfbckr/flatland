@@ -12,11 +12,16 @@ TODO
 [x] multi land möglichkeite
 [x] beispiel zusammenhänge objekte (job für ralf)
 [x] pendown??? checken
+[ ] rotation of rects???
+[ ] typograhy als form
+[ ] better spawn logic / spawn speed
+[ ] fix performance
+[ ] optimize communication
 [ ] network sound
-[ ] ]installations tutorial
-[ ] ]linien (vektoren) zwischen zwei bots ?
-[ ]] interaction collision example 
-
+[ ] installations tutorial
+[ ] linien (vektoren) zwischen zwei bots ?
+[ ] interaction collision example 
+[ ] l-system demo?
 
 
 

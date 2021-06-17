@@ -1,5 +1,5 @@
 /*
-   empty machine example
+   typo swarm
 */
 
 var flatlandConfig = {

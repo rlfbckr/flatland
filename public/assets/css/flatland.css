@@ -1,5 +1,5 @@
 body {
-    background-color: #ffffff;
+    background-color: #dddddd;
     color: #000000;
     overflow-x: hidden;
     overflow-y: auto;
@@ -8,7 +8,7 @@ body {
     font-family: 'Roboto Mono', monospace;
     font-weight: normal;
     font-size: 15px;
-    line-height: 1.5;
+    line-height: 1.3;
     text-rendering: optimizeLegibility;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
@@ -17,7 +17,7 @@ body {
 
 body a {
     text-decoration: none;
-    font-weight: normal;
+    font-weight: bonormallder;
     color: #0000ff;
     cursor: pointer;
 }
@@ -40,6 +40,8 @@ ol {
   }
   
 .light {
-    color: #999999
+    color: #999999;
+    font-weight: normal;
+
 }
 

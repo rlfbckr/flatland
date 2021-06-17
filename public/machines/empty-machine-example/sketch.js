@@ -31,14 +31,15 @@ var machineConfig = {
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine
-        this.type = MachineType.RECT;
-        this.pos.x = random(-100,100);
-        this.pos.y = random(-100,100);
+        this.setType(MachineType.RECT); // make bot a rectangle
+        this.setFill(255,255,255);
+        this.setStroke(0,0,255);
+        this.setRotation(PI/4); // rotate bot 45 degree
+        this.setPosition(random(-100,100),random(-100,100)); // go to random pos;
     }
     move() {
         // how does your machine move 
-        this.pos.x+=random(-2,2);
-        this.pos.y+=random(-2,2);
+        this.setPosition(this.pos.x+random(-2,2),this.pos.y+random(-2,2));
     }
 }
 // --------------------------------------------------------------

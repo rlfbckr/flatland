@@ -31,18 +31,15 @@ var machineConfig = {
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine
-        this.type = MachineType.POINT;
-        this.pos.x = random(-width / 2, width / 2);
-        this.pos.y = random(-height / 2, height / 2);
+        this.setType(MachineType.POINT);
+        this.setPosition(random(-width / 2, width / 2),random(-height / 2, height / 2));
         this.target = points[mapper];
         mapper = (mapper + 1) % points.length;
     }
     move() {
         // how does your machine move 
-        this.pos.x = (this.pos.x * 0.97) + (this.target.x * 0.03);
-        this.pos.y = (this.pos.y * 0.97) + (this.target.y * 0.03);
-        var d = dist(this.pos.x, this.pos.y, this.target.x, this.target.y);
-        this.size = map(d, width / 2, 0, 200, 5);
+        this.setPosition((this.pos.x * 0.97) + (this.target.x * 0.03), (this.pos.y * 0.97) + (this.target.y * 0.03));
+        this.setSize(map(dist(this.pos.x, this.pos.y, this.target.x, this.target.y), width / 2, 0, 200, 5));
     }
 }
 // --------------------------------------------------------------
@@ -50,11 +47,7 @@ class Machine extends defaultMachine {
 
 
 
-
-
 // global p5 stuff
-
-//let socket
 let gui;
 let flatland;
 

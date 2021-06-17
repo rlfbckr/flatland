@@ -29,29 +29,28 @@ var machineConfig = {
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine
-        machineConfig.pendown = true;
-        this.type = MachineType.LINE;
+        this.setPenDown();
+        this.setType(MachineType.LINE);
+        this.setSize(random(2, 10));
+
         this.rotation = (int(random(-4, 4)) * 45);
         this.rotationspeed = random(-0.05, 0.05);
         this.speed = 10;
-        this.size = random(2, 10);
         this.step = 20;
     }
 
     move() {
         // how does your machine move 
-        this.color2 = color(
+        this.setStroke(
             lerp(machineConfig.color1[0], machineConfig.color2[0], this.getLifetime()),
             lerp(machineConfig.color1[1], machineConfig.color2[1], this.getLifetime()),
             lerp(machineConfig.color1[2], machineConfig.color2[2], this.getLifetime()),
-        )
-        this.pos.x += cos(this.rotation) * 2;
-        this.pos.y += sin(this.rotation) * 2;
+        );
+        this.setPosition(this.pos.x + cos(this.rotation) * 2,this.pos.y + sin(this.rotation) * 2);
         if (int(random(20) <= 1)) {
             this.rotation = this.rotation + (int(random(-2, 2)) * 45);
         }
     }
-
 }
 
 // ------------------------------------------------------------------

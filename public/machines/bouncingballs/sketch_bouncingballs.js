@@ -30,15 +30,16 @@ var machineConfig = {
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine
-        machineConfig.pendown = true;
-        this.type = MachineType.CIRCLE;
+        this.setPenDown();
+        this.setType(MachineType.CIRCLE);
         this.rotationspeed = random(-0.05, 0.05);
         this.speed = 10;
         this.velocity = createVector(random(-5, 5), random(-5, 5));
 
     }
     move() {
-        this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2]);
+        // move stuff
+        this.setFill(color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2]));
         // local bounce
         for (let i = 0; i < flatland.machinesLocal.length; i++) {
             if (this != flatland.machinesLocal[i]) {
@@ -60,31 +61,6 @@ class Machine extends defaultMachine {
             }
 
         }
-        // remote bounce
-/*
-        for (let i = 0; i < flatland.machinesRemote.length; i++) {
-            let distance = dist(this.pos.x, this.pos.y, flatland.machinesRemote[i].pos.x, flatland.machinesRemote[i].pos.y);
-            let minimale_distance = ((this.size / 2) + (flatland.machinesRemote[i].size / 2));
-            if (distance <= minimale_distance) {
-                this.velocity.mult(-1);
-                this.pos.x = this.pos.x + random(-100, 100);
-                this.pos.y = this.pos.y + random(-100, 100);
-                this.color1 = color(random(255), random(255), random(255));
-
-            }
-
-        }
-*/
-
-        // how does your machine move 
-        /*
-        this.color1 = color(
-                lerp(machineConfig.color2[0], machineConfig.color1[0], this.getLifetime()),
-                lerp(machineConfig.color2[1], machineConfig.color1[1], this.getLifetime()),
-                lerp(machineConfig.color2[2], machineConfig.color1[2], this.getLifetime()),
-            )
-            // this.color2 = color(255, 255, 255);
-            */
         this.velocity.add(gravitation);
         this.pos.add(this.velocity);
 

@@ -13,7 +13,7 @@ TODO
 [x] beispiel zusammenhänge objekte (job für ralf)
 [x] pendown??? checken
 
-[ ] rotation of rects???
+[x] rotation of rects???
 [ ] typograhy als form
 [ ] better spawn logic / spawn speed
 [ ] fix performance
@@ -98,7 +98,7 @@ class Flatland {
 
         this.machinesLocal = [];
         this.machinesRemote = [];
-        this.monofont = loadFont('/assets//fonts/RobotoMono-Regular.otf');
+        this.monofont = loadFont('../../assets/fonts/RobotoMono-Regular.otf');
         this.sendeven = 1;
         
         textFont(this.monofont);
@@ -273,7 +273,7 @@ class defaultMachine {
         this.rotation = 0;
         this.lastupdate = millis();
         this.audio = false;
-
+        this.lifetime = machineConfig.lifetime;
         this.osc, this.playing, this.freq, this.amp;
         this.freq = 440;
         this.amp = 0.2;
@@ -292,29 +292,61 @@ class defaultMachine {
         this.setup();
     }
 
+    setType(_type) {
+        this.type = _type;
+    }
+    
+    setRotation(_rot) {
+        this.rotation = _rot;
+    }
+    
+    setPosition(_x,_y) {
+        this.pos.x = _x;
+        this.pos.y = _y;
+    }
+    
     stop() {
         this.osc.amp(0, 1.0);
-
         this.osc.stop(1.0);
     }
-    setPhase(_phase) {
+    setAudioPhase(_phase) { // set phase
         this.osc.phase(_phase);
         this.phase = _phase;
     }
-    setPan(_pan) {
+
+    setPhase(_phase) { // deprecated
+        this.osc.phase(_phase);
+        this.phase = _phase;
+    }
+    setPan(_pan) { // deprecated
         this.osc.pan(_pan, 0.9);
         this.pan = _pan;
     }
-    enableAudio() {
+    setAudioPan(_pan) {
+        this.osc.pan(_pan, 0.9);
+        this.pan = _pan;
+    }
+    enableAudio(_freq,_amp) {
         this.osc = new p5.Oscillator('sine');
         this.audio = true;
-        this.osc.freq(1, 0);
-        this.osc.amp(0, 0);
+        this.freq = _freq;
+        this.amp = _amp;
+        this.osc.freq(_freq, 0);
+        this.osc.amp(_amp, 0);
         this.osc.start();
 
     }
+    setAudioFrequency(_freq) {
+        this.freq = _freq;
+        this.osc.freq(this.freq, 0.8);
 
-    updateSound(_freq, _amp) {
+    }
+    setAudioAmplitude(_amp) {
+        this.amp = _amp;
+        this.osc.amp(this.amp, 0.8);
+
+    }
+    updateSound(_freq, _amp) {  // deprecated
         this.freq = _freq;
         this.amp = _amp;
         this.osc.freq(this.freq, 0.8);
@@ -331,14 +363,45 @@ class defaultMachine {
         return this.alive;
     }
     setColor1(_c) {
-        this.color1 = color(_c.r, _c.g, _c.b, _c.a);
+        this.color1 = _c; //color(_c.r, _c.g, _c.b, _c.a);
+    }
+
+    setColor1(_r,_g_,_b,_a) {
+        this.color1 =  color(_r,_g_,_b,_a);
 
     }
-    setColor2(_c) {
-        this.color2 = color(_c.r, _c.g, _c.b, _c.a);
+    setFill(_c) {
+        this.color1 = _c; //color(_c.r, _c.g, _c.b, _c.a);
     }
+
+    setFill(_r,_g_,_b,_a) {
+        this.color1 =  color(_r,_g_,_b,_a);
+
+    }
+
+    setColor2(_c) {
+        this.color2 = _c;
+    }
+
+    setColor2(_r,_g_,_b,_a) {
+        this.color2 =  color(_r,_g_,_b,_a);
+
+    }
+
+    setStroke(_c) {
+        this.color2 = _c;
+    }
+
+    setStroke(_r,_g_,_b,_a) {
+        this.color2 =  color(_r,_g_,_b,_a);
+
+    }
+
     setRotation(_r) {
         this.rotation = _r;
+    }
+    setSize(_size) {
+        this.size = _size;
     }
     setSocketID(_socketid) {
         this.socketid = _socketid;
@@ -348,6 +411,15 @@ class defaultMachine {
     }
     setPen(_pendown) {
         this.pendown = _pendown;
+    }
+    setPenDown() {
+        this.pendown = true;
+    }
+    setPenUp() {
+        this.pendown = false;
+    }
+    setLifetime(_lifetime) {
+        this.lifetime = _lifetime;
     }
     setType(_type) {
         this.type = _type;
@@ -367,10 +439,10 @@ class defaultMachine {
         this.updatePos()
         this.pos.x += random(-this.speed, this.speed);
         this.pos.y += random(-this.speed, this.speed);
-        this.size = map(this.age(), 0, machineConfig.lifetime, machineConfig.maxSize, machineConfig.minSize);
+        this.size = map(this.age(), 0, this.lifetime, machineConfig.maxSize, machineConfig.minSize);
     }
     getLifetime() {
-        return map(this.age(), 0, machineConfig.lifetime, 0.0, 1.0);
+        return map(this.age(), 0, this.lifetime, 0.0, 1.0);
     }
     penUp() {
         this.pendown = false;
@@ -396,7 +468,7 @@ class defaultMachine {
         if (this.local == true && socket.id != undefined) {
             this.socketid = socket.id;
         }
-        if (this.age() > machineConfig.lifetime) {
+        if (this.age() > this.lifetime) {
             this.setAlive(false);
             socket.emit('removemachine', {
                 machineid: this.machineid

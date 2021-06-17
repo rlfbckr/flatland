@@ -32,22 +32,23 @@ var machineConfig = {
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine
-        if (int(random(2)) == 0) { // throw the coin
-            this.type = MachineType.RECT;
+        if (int(random(2)) == 0) { // flip the coin
+            this.setType(MachineType.RECT);
         } else {
-            this.type = MachineType.CIRCLE;
+            this.setType(MachineType.CIRCLE);
         }
+        this.setLifetime(random(0,machineConfig.lifetime));
+        this.setSize(random(10, 100));
+        this.setFill(random(255), random(255), random(255));
+        this.setPenDown();
+
         this.offset = random(2 * PI);
-        this.size = random(10, 100);
         this.rad = random(10, width/2);
-        this.color1 = color(random(255), random(255), random(255));
-        this.penDown();
     }
     move() {
         // how does your machine move 
         this.rotation = noise(this.id * 100, millis() * 0.0001) * 40;
-        this.pos.x = cos(this.offset + (millis() * 0.001)) * this.rad;
-        this.pos.y = sin(this.offset + (millis() * 0.001)) * this.rad;
+        this.setPosition(cos(this.offset + (millis() * 0.001)) * this.rad,sin(this.offset + (millis() * 0.001)) * this.rad);
 
     }
 }

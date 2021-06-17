@@ -17,7 +17,7 @@ var machineConfig = {
     maxCount: 10,
     minSize: 20,
     maxSize: 30,
-    lifetime: 1000000, // forever...!
+    lifetime: 100000, // forever...!
     color1: [255, 0, 255],
     color1Opacity: 0.1,
     color2: [0, 255, 255],
@@ -31,10 +31,10 @@ var machineConfig = {
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine
-        this.type = MachineType.POINT;
-        this.size = random(30, 100);
-        // this.rad = random(10, 300);
-        this.color2 = color(random(255), random(255), random(255));
+        this.setType(MachineType.POINT);
+        this.setSize(random(30, 100));
+        this.setLifetime(random(0,machineConfig.lifetime));
+        this.setStroke(random(255), random(255), random(255));
         //this.penDown();
         this.myown_rotationspeed = random(-0.001,0.001);
         this.myownrandomradius = random(20, 60);
@@ -44,8 +44,7 @@ class Machine extends defaultMachine {
     }
     move() {
         // how does your machine move 
-        this.pos.x = this.myownvariable_centerx + cos(millis() * this.myown_rotationspeed) * this.myownrandomradius;
-        this.pos.y = this.myownvariable_centery + sin(millis() * this.myown_rotationspeed) * this.myownrandomradius;
+        this.setPosition(this.myownvariable_centerx + cos(millis() * this.myown_rotationspeed) * this.myownrandomradius, this.myownvariable_centery + sin(millis() * this.myown_rotationspeed) * this.myownrandomradius);
     }
 }
 // --------------------------------------------------------------

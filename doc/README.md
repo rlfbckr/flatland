@@ -94,4 +94,19 @@ this.type = MachineType.LINE;
 this.setType(MachineType.LINE);
 ```
 
+### drawing/bot rotation
+```javascript
+this.rotation =  PI/4; // 45 degree
+// or
+this.setRotation( PI/4 );
+```
+
+### drawing/bot position
+**coordinate systen 0,0 is in the screen center**
+```javascript
+this.pos.x = 100;
+this.pos.y = -100; 
+// or
+this.setPosition( 100, -100 );
+```
 

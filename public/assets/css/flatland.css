@@ -1,14 +1,14 @@
 body {
-    background-color: #000000;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #000000;
     overflow-x: hidden;
     overflow-y: auto;
     margin: 20px 20px 20px 20px;
     padding: 0px;
     font-family: 'Roboto Mono', monospace;
     font-weight: normal;
-    font-size: 14px;
-    line-height: 1.4;
+    font-size: 15px;
+    line-height: 1.5;
     text-rendering: optimizeLegibility;
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
@@ -18,7 +18,7 @@ body {
 body a {
     text-decoration: none;
     font-weight: normal;
-    color: #95ffac;
+    color: #0000ff;
     cursor: pointer;
 }
 
@@ -30,16 +30,16 @@ ol {
     counter-increment: items;
   }
   li:before {
-    content: "0" counter(items)" ";
+    content: "00" counter(items)" ";
   }
   li:nth-child(n+10):before {
-    content: "0" counter(items)" ";
+    content: "00" counter(items)" ";
   }
   li:nth-child(n+100):before {
     content: counter(items)" ";
   }
   
 .light {
-    color: #757575;
+    color: #999999
 }
 

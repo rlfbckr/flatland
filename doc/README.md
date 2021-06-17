@@ -176,16 +176,15 @@ this.setAudioPhase(0.5);
 ```
 
 ## lifetime
-*machine initializes*
-*initelizes with machineConfig.lifetime*
+*machine initializes with machineConfig.lifetime*
 
 #### setLifetime
 *set lifetime in ms*
 ```javascript
-this.setLifetie(10000); // 10 seconds 
+this.setLifetie(10000); // 10000 ms =  10 seconds 
 ```
 #### getLifetime
-*returns lifetime in float between 0 - 1*
+*returns lifetime in float between 0 - 1 (born - death)*
 ```javascript
 var currentlifetime = this.getLiftime(); 
 ```

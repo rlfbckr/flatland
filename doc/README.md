@@ -67,46 +67,91 @@ function draw() {
 
 ## drawing command
 
-### drawing/bot shape type
+### setType
+*change drawing/bot shape type*
 
-#### circle
+#### CIRCLE
 ```javascript
 this.type = MachineType.CIRCLE;
 // or
 this.setType(MachineType.CIRCLE);
 ```
-#### rect
+#### RECT
 ```javascript
 this.type = MachineType.RECT;
 // or
 this.setType(MachineType.RECT);
 ```
-#### point
+#### POINT
 ```javascript
 this.type = MachineType.POINT;
 // or
 this.setType(MachineType.POINT);
 ```
-#### line
+#### LINE
 ```javascript
 this.type = MachineType.LINE;
 // or
 this.setType(MachineType.LINE);
 ```
 
-### drawing/bot rotation
+### setRotation
+*rotate bot*
 ```javascript
 this.rotation =  PI/4; // 45 degree
 // or
 this.setRotation( PI/4 );
 ```
 
-### drawing/bot position
-**coordinate systen 0,0 is in the screen center**
+### setPosition
+*move bot around*
+*coordinate systen 0,0 is in the screen center*
 ```javascript
 this.pos.x = 100;
 this.pos.y = -100; 
 // or
 this.setPosition( 100, -100 );
+```
+
+### setColor1
+```javascript
+this.color1 = color(255,0,0,128); // transparent red
+// or
+var mycolor = color(255,0,0,128);
+this.setColor1(mycolor);
+//or
+this.setColor1(255,0,0,128);
+
+```
+
+
+## audio commands
+*mostly wrapper functions for (https://p5js.org/reference/#/libraries/p5.sound)*
+
+#### enableAudio
+*turn on audio for this machine*
+```javascript
+this.enableAudio();
+```
+#### setAudioFrequency
+```javascript
+this.setAudioFrequency(440); // a
+```
+#### setAudioAmplitude
+```javascript
+this.setAudioAmplitude(0.5); // half
+```
+#### setAudioPan
+*audio panning*
+-1 = left,
+ 0  = center,
+ 1 = right*
+```javascript
+this.setAudioPan(0); // center
+```
+#### setAudioPhase
+*set phase of oscillator between 0 - 1*
+```javascript
+this.setAudioPhase(0.5); 
 ```
 

@@ -122,7 +122,7 @@ this.setSize(100);
 ```
 
 ### setColor1
-* fill color *
+*fill color*
 ```javascript
 this.color1 = color(255,0,0,128); // transparent red
 // or
@@ -133,7 +133,7 @@ this.setColor1(255,0,0,128);
 ```
 
 ### setColor2
-* stroke *
+*stroke*
 ```javascript
 this.color2 = color(255,0,0,128); // transparent red
 // or

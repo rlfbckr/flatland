@@ -178,7 +178,7 @@ this.setAudioPhase(0.5);
 ```
 
 ## lifetime
-*machine lifetime*
+*machine initializes*
 *initelizes with machineConfig.lifetime*
 
 #### setLifetime

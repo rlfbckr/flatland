@@ -1,6 +1,7 @@
 # flatland documentation
 
-## flatland code skeleton
+
+
 ### machine configuration
 
 ```javascript
@@ -27,7 +28,7 @@ var machineConfig = {
     pendown: false
 }
 ```
-### machine/bot-code
+### machine/bot-code-skeleton
 
 ```javascript
 class Machine extends defaultMachine {
@@ -45,7 +46,7 @@ class Machine extends defaultMachine {
 }
 ```
 
-### p5.js code
+### p5.js code-skeleton
 ```javascript
 let gui;
 let flatland;
@@ -65,4 +66,32 @@ function draw() {
 
 
 ## drawing command
+
+### drawing/bot shape type
+
+#### circle
+```javascript
+this.type = MachineType.CIRCLE;
+// or
+this.setType(MachineType.CIRCLE);
+```
+#### rect
+```javascript
+this.type = MachineType.RECT;
+// or
+this.setType(MachineType.RECT);
+```
+#### point
+```javascript
+this.type = MachineType.POINT;
+// or
+this.setType(MachineType.POINT);
+```
+#### line
+```javascript
+this.type = MachineType.LINE;
+// or
+this.setType(MachineType.LINE);
+```
+
 

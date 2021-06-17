@@ -121,18 +121,20 @@ this.size = 100;
 this.setSize(100);
 ```
 
-### setColor1
+### setFill / setColor1
 *fill color*
 ```javascript
 this.color1 = color(255,0,0,128); // transparent red
 // or
 var mycolor = color(255,0,0,128);
 this.setColor1(mycolor);
-//or
+// or
 this.setColor1(255,0,0,128);
+// or
+this.setFill(255,0,0,128);
 ```
 
-### setColor2
+### setStroke / setColor2
 *stroke*
 ```javascript
 this.color2 = color(255,0,0,128); // transparent red
@@ -141,6 +143,8 @@ var mycolor = color(255,0,0,128);
 this.setColor2(mycolor);
 //or
 this.setColor2(255,0,0,128);
+// or
+this.setStroke(255,0,0,128);
 ```
 
 ## audio commands
@@ -173,3 +177,17 @@ this.setAudioPan(0); // center
 this.setAudioPhase(0.5); 
 ```
 
+## lifetime
+*machine lifetime*
+*initelizes with machineConfig.lifetime*
+
+#### setLifetime
+*set lifetime in ms*
+```javascript
+this.setLifetie(10000); // 10 seconds 
+```
+#### getLifetime
+*returns lifetime in float between 0 - 1*
+```javascript
+var currentlifetime = this.getLiftime(); 
+```

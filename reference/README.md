@@ -1,18 +1,16 @@
-# flatland documentation
+# reference
 
-
-
-### machine configuration
+### machine-configuration
 
 ```javascript
 var flatlandConfig = {
-    server: "https://flatland.earth",
-    land: 'default',
-    updateIntervall: 40,
-    debug: true,
-    clearscreen: true,
-    backgroundcolor: [255, 255, 255],
-    backgroundblend: 0.5
+    server: "https://flatland.earth",  // server to connect to
+    land: 'default',                   // use default land or use your own "private" land to code together "lalaland"
+    updateIntervall: 40,               // send date to the server every xx ms
+    debug: true,                       // show debug information
+    clearscreen: true,                 // clear the background or not
+    backgroundcolor: [255, 255, 255],  // background color
+    backgroundblend: 0.5               // background *transpacency*
 }
 
 var machineConfig = {
@@ -28,25 +26,26 @@ var machineConfig = {
     pendown: false
 }
 ```
-### machine/bot-code-skeleton
+### machine-code-skeleton
 
 ```javascript
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine
-        this.type = MachineType.RECT;
-        this.pos.x = random(-100,100);
-        this.pos.y = random(-100,100);
+        this.setType(MachineType.RECT);                        // make bot a rectangle
+        this.setFill(255,255,255);                             // change fill color to white
+        this.setStroke(0,0,255);                               // change boder color blue
+        this.setRotation(PI/4);                                // rotate bot 45 degree
+        this.setPosition(random(-100,100),random(-100,100));   // "spawn" bot at random pos
     }
     move() {
         // how does your machine move 
-        this.pos.x+=random(-2,2);
-        this.pos.y+=random(-2,2);
+        this.setPosition(this.pos.x+random(-2,2),this.pos.y+random(-2,2)); // update position
     }
 }
 ```
 
-### p5.js code-skeleton
+### p5.js wrapper-code-skeleton
 ```javascript
 let gui;
 let flatland;
@@ -178,16 +177,15 @@ this.setAudioPhase(0.5);
 ```
 
 ## lifetime
-*machine initializes*
-*initelizes with machineConfig.lifetime*
+*machine initializes with machineConfig.lifetime*
 
 #### setLifetime
 *set lifetime in ms*
 ```javascript
-this.setLifetie(10000); // 10 seconds 
+this.setLifetie(10000); // 10000 ms =  10 seconds 
 ```
 #### getLifetime
-*returns lifetime in float between 0 - 1*
+*returns lifetime in float between 0 - 1 (born - death)*
 ```javascript
 var currentlifetime = this.getLiftime(); 
 ```

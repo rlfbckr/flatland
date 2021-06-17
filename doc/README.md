@@ -113,7 +113,16 @@ this.pos.y = -100;
 this.setPosition( 100, -100 );
 ```
 
+### setSize
+*set bot size in pixel*
+```javascript
+this.size = 100;
+// or
+this.setSize(100);
+```
+
 ### setColor1
+* fill color *
 ```javascript
 this.color1 = color(255,0,0,128); // transparent red
 // or
@@ -121,9 +130,18 @@ var mycolor = color(255,0,0,128);
 this.setColor1(mycolor);
 //or
 this.setColor1(255,0,0,128);
-
 ```
 
+### setColor2
+* stroke *
+```javascript
+this.color2 = color(255,0,0,128); // transparent red
+// or
+var mycolor = color(255,0,0,128);
+this.setColor2(mycolor);
+//or
+this.setColor2(255,0,0,128);
+```
 
 ## audio commands
 *mostly wrapper functions for (https://p5js.org/reference/#/libraries/p5.sound)*

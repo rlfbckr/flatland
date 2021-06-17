@@ -1,18 +1,16 @@
-# flatland documentation
+# reference
 
-
-
-### machine configuration
+### machine-configuration
 
 ```javascript
 var flatlandConfig = {
-    server: "https://flatland.earth",
-    land: 'default',
-    updateIntervall: 40,
-    debug: true,
-    clearscreen: true,
-    backgroundcolor: [255, 255, 255],
-    backgroundblend: 0.5
+    server: "https://flatland.earth",  // server to connect to
+    land: 'default',                   // use default land or use your own "private" land to code together "lalaland"
+    updateIntervall: 40,               // send date to the server every xx ms
+    debug: true,                       // show debug information
+    clearscreen: true,                 // clear the background or not
+    backgroundcolor: [255, 255, 255],  // background color
+    backgroundblend: 0.5               // background *transpacency*
 }
 
 var machineConfig = {
@@ -28,7 +26,7 @@ var machineConfig = {
     pendown: false
 }
 ```
-### machine/bot-code-skeleton
+### machine-code-skeleton
 
 ```javascript
 class Machine extends defaultMachine {
@@ -46,7 +44,7 @@ class Machine extends defaultMachine {
 }
 ```
 
-### p5.js code-skeleton
+### p5.js wrapper-code-skeleton
 ```javascript
 let gui;
 let flatland;

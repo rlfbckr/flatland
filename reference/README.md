@@ -10,20 +10,20 @@ var flatlandConfig = {
     debug: true,                       // show debug information
     clearscreen: true,                 // clear the background or not
     backgroundcolor: [255, 255, 255],  // background color
-    backgroundblend: 0.5               // background *transpacency*
+    backgroundblend: 0.5               // background transpacency
 }
 
 var machineConfig = {
-    name: 'empty-machine-example',
-    maxCount: 1,
-    minSize: 20,
-    maxSize: 30,
-    lifetime: 1000,
-    color1: [255, 0, 255],
-    color1Opacity: 1,
-    color2: [0, 0, 0],
-    color2Opacity: 1,
-    pendown: false
+    name: 'example-machine',           // name your machines
+    maxCount: 1,                       // how many machines do you want to spawn
+    minSize: 20,                       // min size of your bots
+    maxSize: 30,                       // max size of your bots
+    lifetime: 1000,                    // how long will it stay alive
+    pendown: false,                    // draw on background true / false
+    color1: [255, 0, 255],             // default fill color
+    color1Opacity: 1,                  // default fill transparency
+    color2: [0, 0, 0],                 // default stroke color
+    color2Opacity: 1                   // default stroke transparency
 }
 ```
 ### machine-code-skeleton
@@ -71,71 +71,73 @@ function draw() {
 
 #### CIRCLE
 ```javascript
-this.type = MachineType.CIRCLE;
-// or
 this.setType(MachineType.CIRCLE);
+// or
+this.type = MachineType.CIRCLE;   // (deprecated) will be gone soon
 ```
 #### RECT
 ```javascript
-this.type = MachineType.RECT;
-// or
 this.setType(MachineType.RECT);
+// or
+this.type = MachineType.RECT;     // (deprecated)
 ```
 #### POINT
 ```javascript
-this.type = MachineType.POINT;
-// or
 this.setType(MachineType.POINT);
+// or
+this.type = MachineType.POINT;    // (deprecated)
 ```
 #### LINE
 ```javascript
-this.type = MachineType.LINE;
-// or
 this.setType(MachineType.LINE);
+// or
+this.type = MachineType.LINE;     // (deprecated)
 ```
 
 ### setRotation
 *rotate bot*
 ```javascript
-this.rotation =  PI/4; // 45 degree
+this.setRotation( PI/4 ); // 45 degree
 // or
-this.setRotation( PI/4 );
+this.rotation =  PI/4;    // 45 degree (deprecated)
 ```
 
 ### setPosition
 *move bot around*
 *coordinate systen 0,0 is in the screen center*
 ```javascript
+this.setPosition( 100, -100 );
+// or
 this.pos.x = 100;
 this.pos.y = -100; 
-// or
-this.setPosition( 100, -100 );
 ```
 
 ### setSize
 *set bot size in pixel*
 ```javascript
-this.size = 100;
-// or
 this.setSize(100);
+// or
+this.size = 100; (deprecated)
 ```
 
 ### setFill / setColor1
 *fill color*
 ```javascript
+this.setFill(255,0,0,128);
+// or
 this.color1 = color(255,0,0,128); // transparent red
 // or
 var mycolor = color(255,0,0,128);
 this.setColor1(mycolor);
 // or
 this.setColor1(255,0,0,128);
-// or
-this.setFill(255,0,0,128);
 ```
 
 ### setStroke / setColor2
 *stroke*
 ```javascript
+this.setStroke(255,0,0,128);
+// or
 this.color2 = color(255,0,0,128); // transparent red
 // or
 var mycolor = color(255,0,0,128);
@@ -143,7 +145,6 @@ this.setColor2(mycolor);
 //or
 this.setColor2(255,0,0,128);
 // or
-this.setStroke(255,0,0,128);
 ```
 
 ## audio commands
@@ -156,7 +157,7 @@ this.enableAudio();
 ```
 #### setAudioFrequency
 ```javascript
-this.setAudioFrequency(440); // a
+this.setAudioFrequency(440); // set to 440 Hz
 ```
 #### setAudioAmplitude
 ```javascript

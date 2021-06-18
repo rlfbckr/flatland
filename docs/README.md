@@ -1,4 +1,4 @@
 # documentation
 
-- [reference](reference.md)
-- [install-guide](install.md)
+- [reference](REFRENCE.md)
+- [install-guide](INSTALL.md)

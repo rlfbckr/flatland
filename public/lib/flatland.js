@@ -184,8 +184,8 @@ class Flatland {
         if (this.machinesRemote[data.machineid] && this.machinesRemote[data.machineid].isAlive()) {
             //update 
             this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
-            this.machinesRemote[data.machineid].setColor1(data.color1);
-            this.machinesRemote[data.machineid].setColor2(data.color2);
+            this.machinesRemote[data.machineid].setDColor1(data.color1);
+            this.machinesRemote[data.machineid].setDColor2(data.color2);
             this.machinesRemote[data.machineid].setRotation(data.rotation);
             this.machinesRemote[data.machineid].setPen(data.pendown);
             this.machinesRemote[data.machineid].setType(data.type);
@@ -197,8 +197,8 @@ class Flatland {
             this.machinesRemote[data.machineid].setSocketID(data.socketid);
             this.machinesRemote[data.machineid].setMachineID(data.machineid);
             //this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
-            this.machinesRemote[data.machineid].setColor1(data.color1);
-            this.machinesRemote[data.machineid].setColor2(data.color2);
+            this.machinesRemote[data.machineid].setDColor1(data.color1);
+            this.machinesRemote[data.machineid].setDColor2(data.color2);
             this.machinesRemote[data.machineid].setRotation(data.rotation);
             this.machinesRemote[data.machineid].setPen(data.pendown);
 
@@ -365,6 +365,12 @@ class defaultMachine {
     setColor1(_c) {
         this.color1 = _c; //color(_c.r, _c.g, _c.b, _c.a);
     }
+    setDColor1(_c) {
+        this.color1 = color(_c.r,_c.g,_c.b,_c.a); //color(_c.r, _c.g, _c.b, _c.a);
+    }
+    setDColor2(_c) {
+        this.color2 = color(_c.r,_c.g,_c.b,_c.a); //color(_c.r, _c.g, _c.b, _c.a);
+    }
 
     setColor1(_r,_g_,_b,_a) {
         this.color1 =  color(_r,_g_,_b,_a);
@@ -486,20 +492,32 @@ class defaultMachine {
                     },
                     size: this.size,
                     type: this.type,
+                    /*
                     color1: {
                         'r': this.color1.levels[0],
                         'g': this.color1.levels[1],
                         'b': this.color1.levels[2],
                         'a': this.color1Opacity * 255,
                     },
-                    //  color1Opacity: this.color1Opacity,
                     color2: {
                         'r': this.color2.levels[0],
                         'g': this.color2.levels[1],
                         'b': this.color2.levels[2],
                         'a': this.color2Opacity * 255,
                     },
-                    //  color2Opacity: this.color2Opacity,
+                    */
+                    color1: {
+                        'r': red(this.color1),
+                        'g': green(this.color1),
+                        'b': blue(this.color1),
+                        'a': alpha(this.color1)
+                    },
+                    color2: {
+                        'r': red(this.color2),
+                        'g': green(this.color2),
+                        'b': blue(this.color2),
+                        'a': alpha(this.color2)  
+                    },
                     socketid: this.socketid,
                     age: this.age(),
                     rotation: this.rotation,

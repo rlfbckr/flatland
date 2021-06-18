@@ -49,7 +49,7 @@ class Machine extends defaultMachine {
                         let minimale_distance = 1.3 * ((flatland.machinesRemote[rm1].size / 2) + (flatland.machinesRemote[rm2].size / 2));
                         //console.log(distance);
                         if (distance <= minimale_distance) {
-                            console.log("remote BANG " + rm1 + " " + rm2);
+                           // console.log("remote BANG " + rm1 + " " + rm2);
                             this.collision = true;
                             this.collison_id1 = rm1;
                             this.collison_id2 = rm2;

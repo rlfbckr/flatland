@@ -12,8 +12,9 @@ TODO
 [x] multi land möglichkeite
 [x] beispiel zusammenhänge objekte (job für ralf)
 [x] pendown??? checken
-
 [x] rotation of rects???
+[ ] machine communication
+
 [ ] typograhy als form
 [ ] better spawn logic / spawn speed
 [ ] fix performance
@@ -87,8 +88,6 @@ function removeMachine(data) {
 function updateRemoteMachines(data) {
     flatland.updateRemoteMachines(data);
 }
-
-
 
 class Flatland {
     constructor() {

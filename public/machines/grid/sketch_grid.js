@@ -4,10 +4,10 @@
 
 var flatlandConfig = {
     server: "https://flatland.earth",
-    land: 'default',
+    land: 'testland',
     updateIntervall: 30,
     debug: false,
-    clearscreen: true,
+    clearscreen: false,
     backgroundcolor: [255, 255, 255],
     backgroundblend: 0.5
 }
@@ -17,7 +17,7 @@ var machineConfig = {
     maxCount: 10,
     minSize: 20,
     maxSize: 30,
-    lifetime: 100000, // forever...!
+    lifetime: 10000, // forever...!
     color1: [255, 0, 255],
     color1Opacity: 0.1,
     color2: [0, 255, 255],
@@ -32,15 +32,18 @@ class Machine extends defaultMachine {
     setup() {
         // initialize your machine
         this.setType(MachineType.POINT);
-        this.setSize(random(30, 100));
+        this.setSize(random(0, 100));
         this.setLifetime(random(0,machineConfig.lifetime));
-        this.setStroke(random(255), random(255), random(255));
+        this.setStroke(random(255), random(255), random(255),128);
+        this.setFill(random(255), random(255), random(255),128);
+        this.setPenDown();
         //this.penDown();
         this.myown_rotationspeed = random(-0.001,0.001);
-        this.myownrandomradius = random(20, 60);
-        this.myownvariable_centerx = grid[order].x;
-        this.myownvariable_centery = grid[order].y;
-        order = (order + 1) % grid.length;
+        this.myownrandomradius =  random(20, 60);
+        var randomindex = int(random(grid.length));
+        this.myownvariable_centerx = grid[index].x;
+        this.myownvariable_centery = grid[index].y;
+        index = (index + 1) % grid.length;
     }
     move() {
         // how does your machine move 
@@ -55,14 +58,15 @@ let gui;
 let flatland;
 
 // my own  gloabal variables
-let order = 0;
+let index = 0;
 let grid = [];
-let maxpoints = 8; // wieviele punkte
+let maxpoints = 6; // wieviele punkte
 let margin = 200; // wieviel rand (open, unten, rechts, links)
 
+// local stuff
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
-
+   // create a global grid 
     for (var y = 0; y < maxpoints; y++) { // für jede zeile
         for (var x = 0; x < maxpoints; x++) { // für jede spalte
             var v = createVector(

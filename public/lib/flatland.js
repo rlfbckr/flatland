@@ -13,8 +13,10 @@ TODO
 [x] beispiel zusammenhänge objekte (job für ralf)
 [x] pendown??? checken
 [x] rotation of rects???
+[ ] reverb
+[ ]
+[ ] audio noise
 [ ] machine communication
-
 [ ] typograhy als form
 [ ] better spawn logic / spawn speed
 [ ] fix performance
@@ -438,6 +440,7 @@ class defaultMachine {
         this.pendown = false;
     }
     setLifetime(_lifetime) {
+        this.born = millis();
         this.lifetime = _lifetime;
     }
     setType(_type) {

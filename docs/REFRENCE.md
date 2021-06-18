@@ -183,7 +183,7 @@ this.setAudioPhase(0.5);
 #### setLifetime
 *set lifetime in ms*
 ```javascript
-this.setLifetie(10000); // 10000 ms =  10 seconds 
+this.setLifetime(10000); // 10000 ms =  10 seconds 
 ```
 #### getLifetime
 *returns lifetime in float between 0 - 1 (born - death)*

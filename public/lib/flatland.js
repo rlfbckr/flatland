@@ -526,8 +526,8 @@ class defaultMachine {
                     age: this.age(),
 
                 }
-                console.log("sss  = "+ this.type);
 /*
+                console.log("sss  = "+ this.type);
                 if (this.type != this.last_type) {
                     var addp = {
                         type: this.type

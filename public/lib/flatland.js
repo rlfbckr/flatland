@@ -130,7 +130,7 @@ class Flatland {
 
     spawn() {
         if (!flatlandConfig.presenter) {
-            this.machinesLocal.push(new Machine(this.genRandomMachineID(), random(-width / 2, width / 2), random(-height / 2, height / 2), 100, true));
+            this.machinesLocal.push(new Machine(this.genRandomMachineID(), random(-width / 2, width / 2), random(-height / 2, height / 2), 100, MachineType.CIRCLE, true));
         }
     }
 
@@ -188,12 +188,14 @@ class Flatland {
             this.machinesRemote[data.machineid].setDColor2(data.color2);
             this.machinesRemote[data.machineid].setRotation(data.rotation);
             this.machinesRemote[data.machineid].setPen(data.pendown);
-            this.machinesRemote[data.machineid].setType(data.type);
+            if (data.type) {
+                this.machinesRemote[data.machineid].setType(data.type);
+            }
 
         } else {
             // new
             //console.log("new");
-            this.machinesRemote[data.machineid] = new Machine(data.machineid, data.pos.x, data.pos.y, data.size, false);
+            this.machinesRemote[data.machineid] = new Machine(data.machineid, data.pos.x, data.pos.y, data.size,data.type, false);
             this.machinesRemote[data.machineid].setSocketID(data.socketid);
             this.machinesRemote[data.machineid].setMachineID(data.machineid);
             //this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
@@ -201,6 +203,10 @@ class Flatland {
             this.machinesRemote[data.machineid].setDColor2(data.color2);
             this.machinesRemote[data.machineid].setRotation(data.rotation);
             this.machinesRemote[data.machineid].setPen(data.pendown);
+            if (data.type) {
+
+                this.machinesRemote[data.machineid].setType(data.type);
+            }
 
         }
 
@@ -262,19 +268,27 @@ class Flatland {
 
 
 class defaultMachine {
-    constructor(_machineid, _x, _y, _size, _isLocal) {
+    constructor(_machineid, _x, _y, _size, _type, _isLocal) {
         this.t = 0;
         this.id = 0;
+
         this.alive = true;
-        this.type = MachineType.RECT;
+        this.setType(_type);
         this.pos = createVector(_x, _y);
         this.posPrevious = createVector(this.pos.x, this.pos.y);
         this.size = _size;
         this.rotation = 0;
+ 
+        this.last_type = this.type;
+        this.last_pos = this.pos.copy();
+        this.last_size = this.size;
+        this.last_rotation = this.rotation;
+
         this.lastupdate = millis();
-        this.audio = false;
         this.lifetime = machineConfig.lifetime;
         this.osc, this.playing, this.freq, this.amp;
+
+        this.audio = false;
         this.freq = 440;
         this.amp = 0.2;
         this.pan = 0;
@@ -283,7 +297,7 @@ class defaultMachine {
         this.type = MachineType.CIRCLE;
         this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
         this.color2 = color(machineConfig.color2[0], machineConfig.color2[1], machineConfig.color2[2], machineConfig.color2Opacity * 255);
-        this.speed = 1;
+//        this.speed = 1;
         this.socketid = -1;
         this.machineid = _machineid;
         this.local = _isLocal;
@@ -485,27 +499,18 @@ class defaultMachine {
                 this.lastsend = millis();
                 //send my machine data to server
                 var data = {
+                    machineid: this.machineid,
+                    socketid: this.socketid,
                     land: flatlandConfig.land,
+//                    alive: this.alive,
                     pos: {
                         'x': this.pos.x,
                         'y': this.pos.y
                     },
                     size: this.size,
                     type: this.type,
-                    /*
-                    color1: {
-                        'r': this.color1.levels[0],
-                        'g': this.color1.levels[1],
-                        'b': this.color1.levels[2],
-                        'a': this.color1Opacity * 255,
-                    },
-                    color2: {
-                        'r': this.color2.levels[0],
-                        'g': this.color2.levels[1],
-                        'b': this.color2.levels[2],
-                        'a': this.color2Opacity * 255,
-                    },
-                    */
+                    rotation: this.rotation,
+                    pendown: this.pendown,                    
                     color1: {
                         'r': red(this.color1),
                         'g': green(this.color1),
@@ -518,16 +523,29 @@ class defaultMachine {
                         'b': blue(this.color2),
                         'a': alpha(this.color2)  
                     },
-                    socketid: this.socketid,
                     age: this.age(),
-                    rotation: this.rotation,
-                    machineid: this.machineid,
-                    pendown: this.pendown,
-                }
 
+                }
+                console.log("sss  = "+ this.type);
+/*
+                if (this.type != this.last_type) {
+                    var addp = {
+                        type: this.type
+                    }
+                    //Object.assign(data, addp); 
+                    console.log("hi");
+                }
+         */
                 socket.emit('machine', data);
             }
         }
+        this.last_type = this.type
+        this.last_pos = this.pos.copy();
+        this.last_size = this.size;
+        this.last_rotation = this.rotation;
+
+
+
         this.t++;
         if (this.pos.x < -width / 2) this.pos.x = -width / 2;
         if (this.pos.y < -height / 2) this.pos.y = -height / 2;

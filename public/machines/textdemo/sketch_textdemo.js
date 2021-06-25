@@ -9,7 +9,7 @@ var flatlandConfig = {
     spawnIntervall: 100,
     debug: false,
     clearscreen: false,
-    backgroundcolor: [255, 255, 255],
+    backgroundcolor: [0,0,0],
     backgroundblend: 0.5
 }
 

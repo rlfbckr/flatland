@@ -13,8 +13,9 @@ TODO
 [x] beispiel zusammenhänge objekte (job für ralf)
 [x] pendown??? checken
 [x] rotation of rects???
-[ ] reverb
-[ ]
+[-] reverb
+[-] interaction collision example 
+
 [ ] audio noise
 [ ] machine communication
 [ ] typograhy als form
@@ -24,7 +25,6 @@ TODO
 [ ] network sound
 [ ] installations tutorial
 [ ] linien (vektoren) zwischen zwei bots ?
-[ ] interaction collision example 
 [ ] l-system demo?
 
 
@@ -48,7 +48,6 @@ function keyPressed() {
             flatlandConfig.debug = true;
             gui.show();
         } else {
-
             flatlandConfig.debug = false;
             gui.hide();
         }

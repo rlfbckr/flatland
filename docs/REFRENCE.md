@@ -192,14 +192,6 @@ this.setReverbAmp(3.5); // reverb amplification
 ```javascript
 this.setReverbDrywet(1); // 
 ```
-
-
-
-       this.connectReverb(3,2);
-        this.setReverbAmp(3.5);
-        this.setReverbDrywet(1);
-
-
 ## lifetime
 *machine initializes with machineConfig.lifetime*
 

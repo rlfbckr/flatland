@@ -33,12 +33,11 @@ class Machine extends defaultMachine {
     setup() {
         // initialize your machine
         this.setType(MachineType.TEXT);
-        this.setLifetime(10000000); //foreverd
+        this.setLifetime(10000000); //forever
         this.setSize(random(60, 150));
         this.setStroke(255, 255, 255, 0);
         this.setFill(255, 255, 255, 200);
-        var randomindex = int(random(grid.length));
-        this.setText(grid[index].text);
+        this.setText(grid[index].text); // letter
         this.setPosition(grid[index].position.x, grid[index].position.y);
         index = (index + 1) % grid.length;
         this.randomrotation = random(-0.01,0.01);

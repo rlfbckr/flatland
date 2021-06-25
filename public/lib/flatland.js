@@ -16,7 +16,7 @@ TODO
 [x] better spawn logic / spawn speed
 [x] reverb
 [x] interaction collision example 
-[ ] typograhy als form
+[x] typograhy als form
 [ ] linien (vektoren) zwischen zwei bots ?
 [ ] growth simulation / l-system demo?
 [ ] machine communication

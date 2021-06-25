@@ -33,7 +33,7 @@ ol {
     content: "00" counter(items)" ";
   }
   li:nth-child(n+10):before {
-    content: "00" counter(items)" ";
+    content: "0" counter(items)" ";
   }
   li:nth-child(n+100):before {
     content: counter(items)" ";

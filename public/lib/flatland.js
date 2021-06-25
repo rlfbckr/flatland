@@ -101,7 +101,7 @@ class Flatland {
         this.machinesRemote = [];
         this.monofont = loadFont('../../assets/fonts/RobotoMono-Regular.otf');
         this.sendeven = 1;
-        
+
         textFont(this.monofont);
         textSize(12);
 
@@ -113,10 +113,12 @@ class Flatland {
         this.drawingCanvas;
         this.drawingCanvas = createGraphics(windowWidth, windowHeight);
         this.drawingCanvas.background(flatlandConfig.backgroundcolor[0], flatlandConfig.backgroundcolor[1], flatlandConfig.backgroundcolor[2]);
+        this.lastspawn = 0;
         this.spawn();
-       // this.registerLand(flatlandConfig.land);
+        // this.registerLand(flatlandConfig.land);
 
     }
+
     registerLand(landname) {
         socket.emit('registerland', {
             land: landname
@@ -124,14 +126,17 @@ class Flatland {
     }
     updateLands(data) {
         allLands = data;
-        updateDatDropdown(selectLand,allLands);
+        updateDatDropdown(selectLand, allLands);
         selectLand.setValue(flatlandConfig.land);
-     //   updateDropdown('lands' , allLands);
+        //   updateDropdown('lands' , allLands);
     }
 
     spawn() {
         if (!flatlandConfig.presenter) {
-            this.machinesLocal.push(new Machine(this.genRandomMachineID(), random(-width / 2, width / 2), random(-height / 2, height / 2), 100, MachineType.CIRCLE, true));
+            if ((millis() - this.lastspawn) >= flatlandConfig.spawnIntervall) {
+                this.machinesLocal.push(new Machine(this.genRandomMachineID(), random(-width / 2, width / 2), random(-height / 2, height / 2), 100, MachineType.CIRCLE, true));
+                this.lastspawn = millis();
+            }
         }
     }
 
@@ -155,7 +160,7 @@ class Flatland {
                 '#local   : ' + this.machineCountLocal() + "\n" +
                 '#remote  : ' + this.machineCountRemote() + "\n" +
                 'pendown  : ' + machineConfig.pendown + "\n" +
-             //   'lands    : '+ allLands.join(" ")+'\n'+
+                //   'lands    : '+ allLands.join(" ")+'\n'+
                 '\n' +
                 'press <d> to toggle debug mode';
             this.overlayCanvas.clear();
@@ -196,7 +201,7 @@ class Flatland {
         } else {
             // new
             //console.log("new");
-            this.machinesRemote[data.machineid] = new Machine(data.machineid, data.pos.x, data.pos.y, data.size,data.type, false);
+            this.machinesRemote[data.machineid] = new Machine(data.machineid, data.pos.x, data.pos.y, data.size, data.type, false);
             this.machinesRemote[data.machineid].setSocketID(data.socketid);
             this.machinesRemote[data.machineid].setMachineID(data.machineid);
             //this.machinesRemote[data.machineid].set(data.pos.x, data.pos.y, data.size);
@@ -224,10 +229,17 @@ class Flatland {
 
             for (let i = 0; i < this.machinesLocal.length; i++) {
                 if (!this.machinesLocal[i].isAlive()) {
-                    if (this.machinesLocal[i].audio == true) {
-                        this.machinesLocal[i].stop();
+                    if (this.machinesLocal[i].audio == true && this.machinesLocal[i].audioStopped == -1) {
+                        this.machinesLocal[i].stopAudio();
+                        if (!this.machinesLocal[i].reverb) {
+                            this.machinesLocal.splice(i, 1);
+                        }
                     }
-                    this.machinesLocal.splice(i, 1);
+                    if (this.machinesLocal[i].audio == true && this.machinesLocal[i].audioStopped > 0) {
+                        if ((millis() - this.machinesLocal[i].audioStopped) > 100) { // let the reverb fade out
+                            this.machinesLocal.splice(i, 1);
+                        }
+                    }
                 } else {
                     this.machinesLocal[i].premove();
                     this.machinesLocal[i].move();
@@ -274,12 +286,13 @@ class defaultMachine {
         this.id = 0;
 
         this.alive = true;
+        this.audioStopped = -1;
         this.setType(_type);
         this.pos = createVector(_x, _y);
         this.posPrevious = createVector(this.pos.x, this.pos.y);
         this.size = _size;
         this.rotation = 0;
- 
+
         this.last_type = this.type;
         this.last_pos = this.pos.copy();
         this.last_size = this.size;
@@ -290,6 +303,7 @@ class defaultMachine {
         this.osc, this.playing, this.freq, this.amp;
 
         this.audio = false;
+        this.reverb = false;
         this.freq = 440;
         this.amp = 0.2;
         this.pan = 0;
@@ -298,7 +312,7 @@ class defaultMachine {
         this.type = MachineType.CIRCLE;
         this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
         this.color2 = color(machineConfig.color2[0], machineConfig.color2[1], machineConfig.color2[2], machineConfig.color2Opacity * 255);
-//        this.speed = 1;
+        //        this.speed = 1;
         this.socketid = -1;
         this.machineid = _machineid;
         this.local = _isLocal;
@@ -310,19 +324,24 @@ class defaultMachine {
     setType(_type) {
         this.type = _type;
     }
-    
+
     setRotation(_rot) {
         this.rotation = _rot;
     }
-    
-    setPosition(_x,_y) {
+
+    setPosition(_x, _y) {
         this.pos.x = _x;
         this.pos.y = _y;
     }
-    
-    stop() {
-        this.osc.amp(0, 1.0);
+
+    stopAudio() {
+        this.osc.amp(0, 5);
         this.osc.stop(1.0);
+        if (this.reverb) {
+            flatlandReverb.amp(0, 1);
+            //    flatlandReverb.disconnect(this.osc);
+        }
+        this.audioStopped = millis();
     }
     setAudioPhase(_phase) { // set phase
         this.osc.phase(_phase);
@@ -341,7 +360,7 @@ class defaultMachine {
         this.osc.pan(_pan, 0.9);
         this.pan = _pan;
     }
-    enableAudio(_freq,_amp) {
+    enableAudio(_freq, _amp) {
         this.osc = new p5.Oscillator('sine');
         this.audio = true;
         this.freq = _freq;
@@ -349,8 +368,36 @@ class defaultMachine {
         this.osc.freq(_freq, 0);
         this.osc.amp(_amp, 0);
         this.osc.start();
+    }
+
+
+    connectReverb() {
+        connectReverb(3, 0.2);
+    }
+    connectReverb(_reverbtime, _decayrate) {
+        this.osc.disconnect(); // remove from noremal audio chain
+        //       flatlandReverb = new p5.Reverb();
+        flatlandReverb.process(this.osc, _reverbtime, _decayrate);
+        flatlandReverb.amp(0, 0.0);
+        this.reverb = true;
+    }
+
+    setReverbAmp(_amp) {
+        flatlandReverb.amp(_amp, 10);
+    }
+
+    setReverbDrywet(_dryWet) {
+        flatlandReverb.drywet(_dryWet);
+
 
     }
+
+    removeReverb() {
+
+
+    }
+
+
     setAudioFrequency(_freq) {
         this.freq = _freq;
         this.osc.freq(this.freq, 0.8);
@@ -358,7 +405,7 @@ class defaultMachine {
     }
     setAudioAmplitude(_amp) {
         this.amp = _amp;
-        this.osc.amp(this.amp, 0.8);
+        this.osc.amp(this.amp, 1);
 
     }
     updateSound(_freq, _amp) {  // deprecated
@@ -381,22 +428,22 @@ class defaultMachine {
         this.color1 = _c; //color(_c.r, _c.g, _c.b, _c.a);
     }
     setDColor1(_c) {
-        this.color1 = color(_c.r,_c.g,_c.b,_c.a); //color(_c.r, _c.g, _c.b, _c.a);
+        this.color1 = color(_c.r, _c.g, _c.b, _c.a); //color(_c.r, _c.g, _c.b, _c.a);
     }
     setDColor2(_c) {
-        this.color2 = color(_c.r,_c.g,_c.b,_c.a); //color(_c.r, _c.g, _c.b, _c.a);
+        this.color2 = color(_c.r, _c.g, _c.b, _c.a); //color(_c.r, _c.g, _c.b, _c.a);
     }
 
-    setColor1(_r,_g_,_b,_a) {
-        this.color1 =  color(_r,_g_,_b,_a);
+    setColor1(_r, _g_, _b, _a) {
+        this.color1 = color(_r, _g_, _b, _a);
 
     }
     setFill(_c) {
         this.color1 = _c; //color(_c.r, _c.g, _c.b, _c.a);
     }
 
-    setFill(_r,_g_,_b,_a) {
-        this.color1 =  color(_r,_g_,_b,_a);
+    setFill(_r, _g_, _b, _a) {
+        this.color1 = color(_r, _g_, _b, _a);
 
     }
 
@@ -404,8 +451,8 @@ class defaultMachine {
         this.color2 = _c;
     }
 
-    setColor2(_r,_g_,_b,_a) {
-        this.color2 =  color(_r,_g_,_b,_a);
+    setColor2(_r, _g_, _b, _a) {
+        this.color2 = color(_r, _g_, _b, _a);
 
     }
 
@@ -413,8 +460,8 @@ class defaultMachine {
         this.color2 = _c;
     }
 
-    setStroke(_r,_g_,_b,_a) {
-        this.color2 =  color(_r,_g_,_b,_a);
+    setStroke(_r, _g_, _b, _a) {
+        this.color2 = color(_r, _g_, _b, _a);
 
     }
 
@@ -504,7 +551,7 @@ class defaultMachine {
                     machineid: this.machineid,
                     socketid: this.socketid,
                     land: flatlandConfig.land,
-//                    alive: this.alive,
+                    //                    alive: this.alive,
                     pos: {
                         'x': this.pos.x,
                         'y': this.pos.y
@@ -512,7 +559,7 @@ class defaultMachine {
                     size: this.size,
                     type: this.type,
                     rotation: this.rotation,
-                    pendown: this.pendown,                    
+                    pendown: this.pendown,
                     color1: {
                         'r': red(this.color1),
                         'g': green(this.color1),
@@ -523,21 +570,21 @@ class defaultMachine {
                         'r': red(this.color2),
                         'g': green(this.color2),
                         'b': blue(this.color2),
-                        'a': alpha(this.color2)  
+                        'a': alpha(this.color2)
                     },
                     age: this.age(),
 
                 }
-/*
-                console.log("sss  = "+ this.type);
-                if (this.type != this.last_type) {
-                    var addp = {
-                        type: this.type
-                    }
-                    //Object.assign(data, addp); 
-                    console.log("hi");
-                }
-         */
+                /*
+                                console.log("sss  = "+ this.type);
+                                if (this.type != this.last_type) {
+                                    var addp = {
+                                        type: this.type
+                                    }
+                                    //Object.assign(data, addp); 
+                                    console.log("hi");
+                                }
+                         */
                 socket.emit('machine', data);
             }
         }
@@ -555,7 +602,7 @@ class defaultMachine {
         if (this.pos.y > height / 2) this.pos.y = height / 2;
         //        this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
         //        this.color2 = color(machineConfig.color2[0], machineConfig.color2[1], machineConfig.color2[2], machineConfig.color2Opacity * 255);
-        this.pendown = machineConfig.pendown;
+        // this.pendown = machineConfig.pendown;
         this.lastupdate = millis();
 
         this._drawOnCanvas();
@@ -658,16 +705,16 @@ class defaultMachine {
 }
 
 
-function updateDatDropdown(target, list){   
+function updateDatDropdown(target, list) {
     innerHTMLStr = "";
-    if(list.constructor.name == 'Array'){
-        for(var i=0; i<list.length; i++){
+    if (list.constructor.name == 'Array') {
+        for (var i = 0; i < list.length; i++) {
             var str = "<option value='" + list[i] + "'>" + list[i] + "</option>";
-            innerHTMLStr += str;        
+            innerHTMLStr += str;
         }
     }
-    if(list.constructor.name == 'Object'){
-        for(var key in list){
+    if (list.constructor.name == 'Object') {
+        for (var key in list) {
             var str = "<option value='" + list[key] + "'>" + key + "</option>";
             innerHTMLStr += str;
         }
@@ -682,6 +729,10 @@ function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
 }
 
+function initFlatlandAudio() {
+    flatlandReverb = new p5.Reverb();
+
+}
 function initGui() {
     gui = new dat.GUI();
 
@@ -690,6 +741,7 @@ function initGui() {
     selectLand = guiFlatlandFolder.add(flatlandConfig, 'land', allLands);
     guiFlatlandFolder.add(flatlandConfig, 'debug');
     guiFlatlandFolder.add(flatlandConfig, 'updateIntervall', 1, 250);
+    guiFlatlandFolder.add(flatlandConfig, 'spawnIntervall', 1, 5000);
     guiFlatlandFolder.addColor(flatlandConfig, 'backgroundcolor');
     guiFlatlandFolder.add(flatlandConfig, 'backgroundblend', 0.0, 1.0);
     guiFlatlandFolder.add(flatlandConfig, 'clearscreen');

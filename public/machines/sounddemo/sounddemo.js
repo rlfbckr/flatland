@@ -5,8 +5,8 @@
 var flatlandConfig = {
     server: "https://flatland.earth",
     land: 'default',
-    updateIntervall: 20,
-    spawnIntervall: 100,
+    updateIntervall: 10,
+    spawnIntervall: 500,
     debug: false,
     clearscreen: true,
     backgroundcolor: [255, 255, 255],
@@ -14,7 +14,7 @@ var flatlandConfig = {
 }
 
 var machineConfig = {
-    name: 'mousecontrol',
+    name: 'sounddemo',
     maxCount: 5,
     minSize: 1,
     maxSize: 200,
@@ -40,6 +40,9 @@ class Machine extends defaultMachine {
         this.setStroke(0,0,0,0);
         this.setFill(color(random(255), random(255), random(255), random(100, 200)));
         this.enableAudio(1,0);
+        this.connectReverb(3,2);
+        this.setReverbAmp(3.5);
+        this.setReverbDrywet(1);
         this.setAudioPhase(map(this.speed, -0.1, 0.1, 0, 1));
         this.lastaudioupdate = 0;
         this.centerX = 0; //mouse pos
@@ -71,6 +74,7 @@ let centerOfSystemY = 0;
 
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
+    initFlatlandAudio();
     flatland = new Flatland(); // connect to the flatland server
     initGui();
     initSocketIO(flatlandConfig.server);
@@ -78,9 +82,6 @@ function setup() {
 
 
 function draw() {
-    if (mouseIsPressed) {
-        centerOfSystemX = mouseX- (width / 2);
-        centerOfSystemY = mouseY- (height / 2);
-    }
+
     flatland.update(); // update + draw flatland
 }

@@ -7,6 +7,7 @@ var flatlandConfig = {
     server: "https://flatland.earth",  // server to connect to
     land: 'default',                   // use default land or use your own "private" land to code together "lalaland"
     updateIntervall: 40,               // send date to the server every xx ms
+    spawnIntervall: 10,                // intervall between to new machines!
     debug: true,                       // show debug information
     clearscreen: true,                 // clear the background or not
     backgroundcolor: [255, 255, 255],  // background color

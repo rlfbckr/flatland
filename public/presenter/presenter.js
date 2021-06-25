@@ -7,6 +7,7 @@ var flatlandConfig = {
     // server: "http://localhost:3000",
     server: "https://flatland.earth",
     land: 'default',
+    spawnIntervall: 100,
     debug: true,
     presenter: true,
     clearscreen: true,

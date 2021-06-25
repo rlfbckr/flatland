@@ -33,6 +33,11 @@ class Machine extends defaultMachine {
     setup() {
         // initialize your machine
         this.setType(MachineType.POINT);
+        /*
+        this.setType(MachineType.TEXT);
+        this.setLetter("BLABLA");
+        this.setTextSize(100);
+        */
         this.setSize(random(0, 100));
         this.setLifetime(random(0,machineConfig.lifetime));
         this.setStroke(random(255), random(255), random(255),128);
@@ -49,6 +54,10 @@ class Machine extends defaultMachine {
     move() {
         // how does your machine move 
         this.setPosition(this.myownvariable_centerx + cos(millis() * this.myown_rotationspeed) * this.myownrandomradius, this.myownvariable_centery + sin(millis() * this.myown_rotationspeed) * this.myownrandomradius);
+        fill(255,0,0);
+        textSize(100);
+        textAlign(CENTER,CENTER);
+        text(this.id,this.pos.x,this.pos.y);
     }
 }
 // --------------------------------------------------------------
@@ -87,5 +96,6 @@ function setup() {
 
 function draw() {
     flatland.update(); // update + draw flatland
+
 }
 

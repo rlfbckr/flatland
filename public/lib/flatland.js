@@ -13,19 +13,20 @@ TODO
 [x] beispiel zusammenhänge objekte (job für ralf)
 [x] pendown??? checken
 [x] rotation of rects???
-[-] reverb
-[-] interaction collision example 
-
-[ ] audio noise
-[ ] machine communication
+[x] better spawn logic / spawn speed
+[x] reverb
+[x] interaction collision example 
 [ ] typograhy als form
-[ ] better spawn logic / spawn speed
+[ ] linien (vektoren) zwischen zwei bots ?
+[ ] growth simulation / l-system demo?
+[ ] machine communication
+[ ] network sound
+
+
 [ ] fix performance
 [ ] optimize communication
-[ ] network sound
 [ ] installations tutorial
-[ ] linien (vektoren) zwischen zwei bots ?
-[ ] l-system demo?
+[ ] audio noise
 
 
 

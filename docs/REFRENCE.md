@@ -177,6 +177,28 @@ this.setAudioPan(0); // center
 ```javascript
 this.setAudioPhase(0.5); 
 ```
+###  this.connectReverb
+*connects synthesis to reverb*
+```javascript
+this.connectReverb(3,2); // roomsize + decay
+```
+###  this.setReverbAmp
+*set amplification*
+```javascript
+this.setReverbAmp(3.5); // reverb amplification
+```
+###  this.setReverbDrywet
+*dry-wet 0-1*
+```javascript
+this.setReverbDrywet(1); // 
+```
+
+
+
+       this.connectReverb(3,2);
+        this.setReverbAmp(3.5);
+        this.setReverbDrywet(1);
+
 
 ## lifetime
 *machine initializes with machineConfig.lifetime*

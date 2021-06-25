@@ -9,7 +9,7 @@ var flatlandConfig = {
     spawnIntervall: 100,
     debug: false,
     clearscreen: false,
-    backgroundcolor: [0,0,0],
+    backgroundcolor: [0, 0, 0],
     backgroundblend: 0.5
 }
 
@@ -33,23 +33,19 @@ class Machine extends defaultMachine {
     setup() {
         // initialize your machine
         this.setType(MachineType.TEXT);
-        this.setText("hello\nworld!");
-        this.setSize(random(10, 100));
-        this.setLifetime(random(0,machineConfig.lifetime));
-        this.setStroke(random(255), random(255), random(255),128);
-        this.setFill(random(255), random(255), random(255),128);
-        this.myown_rotationspeed = random(-0.001,0.001);
-        this.myownrandomradius =  random(20, 60);
+        this.setLifetime(10000000); //foreverd
+        this.setSize(random(60, 150));
+        this.setStroke(255, 255, 255, 0);
+        this.setFill(255, 255, 255, 200);
         var randomindex = int(random(grid.length));
-        this.myownvariable_centerx = grid[index].x;
-        this.myownvariable_centery = grid[index].y;
+        this.setText(grid[index].text);
+        this.setPosition(grid[index].position.x, grid[index].position.y);
         index = (index + 1) % grid.length;
+        this.randomrotation = random(-0.01,0.01);
     }
     move() {
         // how does your machine move 
-        this.setPosition(this.myownvariable_centerx + cos(millis() * this.myown_rotationspeed) * this.myownrandomradius, this.myownvariable_centery + sin(millis() * this.myown_rotationspeed) * this.myownrandomradius);
-        this.rotation+=0.01;
-
+        this.rotation +=this.randomrotation;
     }
 }
 // --------------------------------------------------------------
@@ -61,22 +57,30 @@ let flatland;
 
 // my own  gloabal variables
 let index = 0;
+let maxpoints = 4;
+let margin = 200;
 let grid = [];
-let maxpoints = 6; // wieviele punkte
-let margin = 200; // wieviel rand (open, unten, rechts, links)
-
+let textgrid = [
+    'H', 'E', 'L', 'L',
+    'O', ' ', 'F', 'L',
+    'A', 'T', 'L', 'A',
+    'N', 'D', '.', '.'
+];
 // local stuff
 function setup() {
     createCanvas(windowWidth, windowHeight, WEBGL);
-   // create a global grid 
+    // create a global grid 
     for (var y = 0; y < maxpoints; y++) { // für jede zeile
         for (var x = 0; x < maxpoints; x++) { // für jede spalte
-            var v = createVector(
+            var position = createVector(
                 map(x, 0, maxpoints - 1, -(width / 2) + margin, (width / 2) - margin),
                 map(y, 0, maxpoints - 1, -(height / 2) + margin, (height / 2) - margin)
             );
-            console.log(v.x + ' ' + v.y);
-            grid.push(v);
+            var data = {
+                'position': position,
+                'text': textgrid[x + (y * maxpoints)]
+            };
+            grid.push(data);
         }
     }
     machineConfig.maxCount = grid.length;

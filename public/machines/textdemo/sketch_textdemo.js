@@ -4,7 +4,7 @@
 
 var flatlandConfig = {
     server: "https://flatland.earth",
-    land: 'test',
+    land: 'default',
     updateIntervall: 30,
     spawnIntervall: 100,
     debug: false,
@@ -14,7 +14,7 @@ var flatlandConfig = {
 }
 
 var machineConfig = {
-    name: 'grid',
+    name: 'textdemo',
     maxCount: 10,
     minSize: 20,
     maxSize: 30,

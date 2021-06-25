@@ -193,9 +193,8 @@ class Flatland {
             this.machinesRemote[data.machineid].setDColor2(data.color2);
             this.machinesRemote[data.machineid].setRotation(data.rotation);
             this.machinesRemote[data.machineid].setPen(data.pendown);
-            if (data.type) {
-                this.machinesRemote[data.machineid].setType(data.type);
-            }
+            this.machinesRemote[data.machineid].setText(data.text);
+            if (data.type) this.machinesRemote[data.machineid].setType(data.type);
 
         } else {
             // new
@@ -208,10 +207,9 @@ class Flatland {
             this.machinesRemote[data.machineid].setDColor2(data.color2);
             this.machinesRemote[data.machineid].setRotation(data.rotation);
             this.machinesRemote[data.machineid].setPen(data.pendown);
-            if (data.type) {
 
-                this.machinesRemote[data.machineid].setType(data.type);
-            }
+            this.machinesRemote[data.machineid].setText(data.text);
+            if (data.type) this.machinesRemote[data.machineid].setType(data.type);
 
         }
 
@@ -568,6 +566,7 @@ class defaultMachine {
                         'y': this.pos.y
                     },
                     size: this.size,
+                    text: this.text,
                     type: this.type,
                     rotation: this.rotation,
                     pendown: this.pendown,

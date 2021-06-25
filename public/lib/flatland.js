@@ -93,7 +93,7 @@ function updateRemoteMachines(data) {
 }
 
 class Flatland {
-    constructor() {
+    constructor(_autospan) {
         // this.socket = io.connect(flatlandConfig.server);
         // this.socket.on('updateremotemachines', updateRemoteMachines);
         // this.socket.on('removemachine', removeMachine);
@@ -115,7 +115,13 @@ class Flatland {
         this.drawingCanvas = createGraphics(windowWidth, windowHeight);
         this.drawingCanvas.background(flatlandConfig.backgroundcolor[0], flatlandConfig.backgroundcolor[1], flatlandConfig.backgroundcolor[2]);
         this.lastspawn = 0;
-        this.spawn();
+        if (_autospan === undefined) {
+            this.autospawn = 1;
+            this.spawn();
+        } else {
+            this.autospawn = _autospan;
+        }
+
         // this.registerLand(flatlandConfig.land);
 
     }
@@ -132,12 +138,32 @@ class Flatland {
         //   updateDropdown('lands' , allLands);
     }
 
-    spawn() {
+    spawn(_x, _y, _size) {
+
+        if (_x === undefined) {
+            this.x = random(-width / 2, width / 2);
+   
+        } else {
+            this.x = _x;
+        }
+        if (_y === undefined) {
+            this.y = random(-width / 2, width / 2);
+   
+        } else {
+            this.y = _y;
+        }
+        if (_y === undefined) {
+            this.size = 100;
+   
+        } else {
+            this.size = _size;
+        }
+
         if (!flatlandConfig.presenter) {
-     
-                this.machinesLocal.push(new Machine(this.genRandomMachineID(), random(-width / 2, width / 2), random(-height / 2, height / 2), 100, MachineType.CIRCLE, true));
+            this.machinesLocal.push(new Machine(this.genRandomMachineID(), this.x, this.y, this.size, MachineType.CIRCLE, true));
         }
     }
+
 
 
     clearScreen() {
@@ -219,13 +245,14 @@ class Flatland {
         this.clearScreen();
         image(this.drawingCanvas, -width / 2, -height / 2);
         if (!flatlandConfig.presenter) {
-            if (this.machinesLocal.length < machineConfig.maxCount) {
-                if ((millis() - this.lastspawn) >= flatlandConfig.spawnIntervall) {                //this.lastspawn = millis();
-                    this.spawn();
-                    this.lastspawn = millis();
+            if (this.autospawn) {
+                if (this.machinesLocal.length < machineConfig.maxCount) {
+                    if ((millis() - this.lastspawn) >= flatlandConfig.spawnIntervall) {                //this.lastspawn = millis();
+                        this.spawn();
+                        this.lastspawn = millis();
+                    }
                 }
             }
-
             for (let i = 0; i < this.machinesLocal.length; i++) {
                 if (!this.machinesLocal[i].isAlive()) {
                     if (this.machinesLocal[i].audio == true && this.machinesLocal[i].audioStopped == -1) {
@@ -241,7 +268,7 @@ class Flatland {
                     }
                     if (this.machinesLocal[i].audio == false) {
                         this.machinesLocal.splice(i, 1);
-                    
+
                     }
                 } else {
                     this.machinesLocal[i].premove();
@@ -316,7 +343,7 @@ class defaultMachine {
         this.text = "x";
         this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
         this.color2 = color(machineConfig.color2[0], machineConfig.color2[1], machineConfig.color2[2], machineConfig.color2Opacity * 255);
-        //        this.speed = 1;
+        // this.speed = 1;
         this.socketid = -1;
         this.machineid = _machineid;
         this.local = _isLocal;
@@ -397,13 +424,9 @@ class defaultMachine {
 
     setReverbDrywet(_dryWet) {
         flatlandReverb.drywet(_dryWet);
-
-
     }
 
     removeReverb() {
-
-
     }
 
 
@@ -655,12 +678,12 @@ class defaultMachine {
 
             if (this.type == MachineType.TEXT) {
                 flatland.drawingCanvas.strokeWeight(1);
-                flatland.drawingCanvas.textAlign(CENTER,CENTER)
+                flatland.drawingCanvas.textAlign(CENTER, CENTER)
                 flatland.drawingCanvas.push();
                 flatland.drawingCanvas.translate(this.pos.x + width / 2, this.pos.y + height / 2);
                 flatland.drawingCanvas.rotate(this.rotation);
                 flatland.drawingCanvas.textSize(this.size);
-                flatland.drawingCanvas.text(this.text,0, 0);
+                flatland.drawingCanvas.text(this.text, 0, 0);
 
                 flatland.drawingCanvas.pop();
             }
@@ -702,13 +725,13 @@ class defaultMachine {
 
 
         if (this.type == MachineType.TEXT) {
-             strokeWeight(1);
-            textAlign(CENTER,CENTER)
+            strokeWeight(1);
+            textAlign(CENTER, CENTER)
             push();
-            translate(this.pos.x, this.pos.y );
+            translate(this.pos.x, this.pos.y);
             rotate(this.rotation);
             textSize(this.size);
-            text(this.text,0, 0);
+            text(this.text, 0, 0);
             pop();
         }
 

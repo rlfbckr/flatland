@@ -18,11 +18,11 @@ var machineConfig = {
     maxCount: 10,
     minSize: 20,
     maxSize: 30,
-    lifetime: 6000,
+    lifetime: 20000,
     color1: [0, 0, 0],
     color1Opacity: 0.5,
     color2: [0, 0, 0],
-    color2Opacity: 0.2,
+    color2Opacity: 0.9,
     pendown: true
 }
 

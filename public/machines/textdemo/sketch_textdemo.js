@@ -91,6 +91,5 @@ function setup() {
 
 function draw() {
     flatland.update(); // update + draw flatland
-
 }
 

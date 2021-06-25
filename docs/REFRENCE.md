@@ -94,6 +94,14 @@ this.setType(MachineType.LINE);
 // or
 this.type = MachineType.LINE;     // (deprecated)
 ```
+#### TEXT
+```javascript
+this.setType(MachineType.TEXT);
+this.setText("hi");
+// or
+this.type = MachineType.TEXT;     // (deprecated)
+this.text = "hi";
+```
 
 ### setRotation
 *rotate bot*

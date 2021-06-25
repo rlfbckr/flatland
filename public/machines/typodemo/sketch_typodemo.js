@@ -4,7 +4,7 @@
 
 var flatlandConfig = {
     server: "https://flatland.earth",
-    land: 'testland',
+    land: 'test',
     updateIntervall: 30,
     spawnIntervall: 100,
     debug: false,
@@ -32,18 +32,12 @@ var machineConfig = {
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine
-        this.setType(MachineType.POINT);
-        /*
         this.setType(MachineType.TEXT);
-        this.setLetter("BLABLA");
-        this.setTextSize(100);
-        */
-        this.setSize(random(0, 100));
+        this.setText("hello\nworld!");
+        this.setSize(random(10, 100));
         this.setLifetime(random(0,machineConfig.lifetime));
         this.setStroke(random(255), random(255), random(255),128);
         this.setFill(random(255), random(255), random(255),128);
-        this.setPenDown();
-        //this.penDown();
         this.myown_rotationspeed = random(-0.001,0.001);
         this.myownrandomradius =  random(20, 60);
         var randomindex = int(random(grid.length));
@@ -54,12 +48,8 @@ class Machine extends defaultMachine {
     move() {
         // how does your machine move 
         this.setPosition(this.myownvariable_centerx + cos(millis() * this.myown_rotationspeed) * this.myownrandomradius, this.myownvariable_centery + sin(millis() * this.myown_rotationspeed) * this.myownrandomradius);
-        /*
-        fill(255,0,0);
-        textSize(100);
-        textAlign(CENTER,CENTER);
-        text(this.id,this.pos.x,this.pos.y);
-        */
+        this.rotation+=0.01;
+
     }
 }
 // --------------------------------------------------------------

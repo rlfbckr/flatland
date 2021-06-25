@@ -29,6 +29,7 @@ var machineConfig = {
 
 
 // ---------------------------------------------------------------
+
 class Machine extends defaultMachine {
     setup() {
         // initialize your machine

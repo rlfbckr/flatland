@@ -40,7 +40,8 @@ const MachineType = {
     TRI: 3,
     POINT: 4,
     LINE: 5,
-    CUSTOM: 6
+    CUSTOM: 6,
+    TEXT: 7
 };
 
 function keyPressed() {
@@ -314,6 +315,7 @@ class defaultMachine {
         this.phase = 0;
         // this.pendown = false;
         this.type = MachineType.CIRCLE;
+        this.text = "x";
         this.color1 = color(machineConfig.color1[0], machineConfig.color1[1], machineConfig.color1[2], machineConfig.color1Opacity * 255);
         this.color2 = color(machineConfig.color2[0], machineConfig.color2[1], machineConfig.color2[2], machineConfig.color2Opacity * 255);
         //        this.speed = 1;
@@ -324,6 +326,11 @@ class defaultMachine {
         this.lastsend = millis();
         this.setup();
     }
+
+    setText(_txt) {
+        this.text = _txt;
+    }
+
 
     setType(_type) {
         this.type = _type;
@@ -647,6 +654,18 @@ class defaultMachine {
                 flatland.drawingCanvas.pop();
             }
 
+            if (this.type == MachineType.TEXT) {
+                flatland.drawingCanvas.strokeWeight(1);
+                flatland.drawingCanvas.textAlign(CENTER,CENTER)
+                flatland.drawingCanvas.push();
+                flatland.drawingCanvas.translate(this.pos.x + width / 2, this.pos.y + height / 2);
+                flatland.drawingCanvas.rotate(this.rotation);
+                flatland.drawingCanvas.textSize(this.size);
+                flatland.drawingCanvas.text(this.text,0, 0);
+
+                flatland.drawingCanvas.pop();
+            }
+
         }
 
     }
@@ -681,6 +700,19 @@ class defaultMachine {
             rect(0, 0, this.size, this.size);
             pop();
         }
+
+
+        if (this.type == MachineType.TEXT) {
+             strokeWeight(1);
+            textAlign(CENTER,CENTER)
+            push();
+            translate(this.pos.x, this.pos.y );
+            rotate(this.rotation);
+            textSize(this.size);
+            text(this.text,0, 0);
+            pop();
+        }
+
     }
 
     display() {

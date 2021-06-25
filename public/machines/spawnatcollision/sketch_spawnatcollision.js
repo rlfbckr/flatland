@@ -36,8 +36,8 @@ class Machine extends defaultMachine {
         this.setLifetime(1000000); // life long
         this.setSize(0); // make me invisible small
         this.collision = false;
-        this.collison_id1 = 0;
-        this.collison_id2 = 0;
+      //  this.collison_id1 = 0;
+     //   this.collison_id2 = 0;
         this.setPosition(0, 0); // stay in the center
     }
     move() {

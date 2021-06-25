@@ -40,8 +40,8 @@ class Machine extends defaultMachine {
         this.setStroke(0,0,0,0);
         this.setFill(color(random(255), random(255), random(255), random(100, 200)));
         this.enableAudio(1,0);
-        this.connectReverb(3,2);
-        this.setReverbAmp(3.5);
+        this.connectReverb(10,2);
+        this.setReverbAmp(4);
         this.setReverbDrywet(1);
         this.setAudioPhase(map(this.speed, -0.1, 0.1, 0, 1));
         this.lastaudioupdate = 0;

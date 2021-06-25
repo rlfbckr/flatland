@@ -220,11 +220,10 @@ class Flatland {
         image(this.drawingCanvas, -width / 2, -height / 2);
         if (!flatlandConfig.presenter) {
             if (this.machinesLocal.length < machineConfig.maxCount) {
-    if ((millis() - this.lastspawn) >= flatlandConfig.spawnIntervall) {                //this.lastspawn = millis();
-   this.spawn();
-  }
-
-
+                if ((millis() - this.lastspawn) >= flatlandConfig.spawnIntervall) {                //this.lastspawn = millis();
+                    this.spawn();
+                    this.lastspawn = millis();
+                }
             }
 
             for (let i = 0; i < this.machinesLocal.length; i++) {

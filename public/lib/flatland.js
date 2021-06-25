@@ -133,10 +133,8 @@ class Flatland {
 
     spawn() {
         if (!flatlandConfig.presenter) {
-            if ((millis() - this.lastspawn) >= flatlandConfig.spawnIntervall) {
+     
                 this.machinesLocal.push(new Machine(this.genRandomMachineID(), random(-width / 2, width / 2), random(-height / 2, height / 2), 100, MachineType.CIRCLE, true));
-                this.lastspawn = millis();
-            }
         }
     }
 
@@ -223,7 +221,10 @@ class Flatland {
         image(this.drawingCanvas, -width / 2, -height / 2);
         if (!flatlandConfig.presenter) {
             if (this.machinesLocal.length < machineConfig.maxCount) {
-                this.spawn();
+    if ((millis() - this.lastspawn) >= flatlandConfig.spawnIntervall) {                //this.lastspawn = millis();
+   this.spawn();
+  }
+
 
             }
 
@@ -239,6 +240,10 @@ class Flatland {
                         if ((millis() - this.machinesLocal[i].audioStopped) > 100) { // let the reverb fade out
                             this.machinesLocal.splice(i, 1);
                         }
+                    }
+                    if (this.machinesLocal[i].audio == false) {
+                        this.machinesLocal.splice(i, 1);
+                    
                     }
                 } else {
                     this.machinesLocal[i].premove();

@@ -255,6 +255,7 @@ class Flatland {
             }
             for (let i = 0; i < this.machinesLocal.length; i++) {
                 if (!this.machinesLocal[i].isAlive()) {
+                    this.machinesLocal[i].onFinish();
                     if (this.machinesLocal[i].audio == true && this.machinesLocal[i].audioStopped == -1) {
                         this.machinesLocal[i].stopAudio();
                         if (!this.machinesLocal[i].reverb) {
@@ -268,8 +269,8 @@ class Flatland {
                     }
                     if (this.machinesLocal[i].audio == false) {
                         this.machinesLocal.splice(i, 1);
-
                     }
+                   
                 } else {
                     this.machinesLocal[i].premove();
                     this.machinesLocal[i].move();
@@ -379,6 +380,12 @@ class defaultMachine {
         }
         this.audioStopped = millis();
     }
+
+    onFinish() {
+        // death is near
+        // cleam up the mess
+    }
+
     setAudioPhase(_phase) { // set phase
         this.osc.phase(_phase);
         this.phase = _phase;

@@ -52,6 +52,12 @@ class Machine extends defaultMachine {
         this.setPosition(cos(this.offset + (millis() * 0.001)) * this.rad,sin(this.offset + (millis() * 0.001)) * this.rad);
 
     }
+    onFinish() {
+        // callback function to be called when a bots is about to be killed
+        print("onFinish... bye bye!");
+        fill(255,0,0);
+        text("BYE BYE", this.pos.x,this.pos.y);
+    }
 }
 // --------------------------------------------------------------
 

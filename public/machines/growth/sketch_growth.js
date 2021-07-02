@@ -40,13 +40,18 @@ class Machine extends defaultMachine {
         this.setStroke( noise(millis()*0.0001,(this.size * 0.001) * 1)    *255, 
                         noise(millis()*0.0001,(this.size * 0.01) * 100)  * 255, 
                         noise(millis()*0.0001,(this.size * 0.01) * 1000) * 255, 
-                        map(this.size,max_depth,1,5,255),);
+                        map(this.size,max_depth,1,5,255)
+                      );
         this.angle = random(4 * PI); // random richtung
-        this.drift =  random(-0.01, 0.01);
+var origin = createVector(width/2,height/2);
+var pp = createVector(this.pos.x+width/2,this.pos.y+height/2);
+      //d  this.angle = pp.angleBetween(origin);
+        print(this.angle);
+        this.drift = random(-0.01, 0.01);
     }
     move() {
         // how does your machine move 
-        this.angle += this.drift+random(-0.01,0.01);
+        this.angle += this.drift+random(-0.1,0.1);
         this.direction = createVector(cos(this.angle) * 1.1, sin(this.angle) * 1.1);
         this.pos.x += this.direction.x;
         this.pos.y += this.direction.y;
@@ -76,7 +81,7 @@ class Machine extends defaultMachine {
 // global p5 stuff
 let gui;
 let flatland;
-let max_depth = 20;
+let max_depth = 10;
 //let current_depth = max_depth;
 
 function setup() {
@@ -86,9 +91,6 @@ function setup() {
     initSocketIO(flatlandConfig.server);
     initGui();
     flatland.spawn(0, 0, max_depth); // spawn first at pos
-//   flatland.drawingCanvas.blendMode(SCREEN);
- //flatland.drawingCanvas.blendMode(ADD);
-
 }
 
 

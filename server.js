@@ -2,10 +2,11 @@
    F-L-A-T-L-A-N-D S-E-R-V-E-R
    Ralf Baecker 2021
 
-   platform collaborative generative practices
+   platform fro  collaborative generative practices
 
 */
 
+const local = 0; // run local
 var lands = ['default', 'atlantis', 'group1', 'group2', 'group3'];
 
 const https = require('https');
@@ -32,15 +33,28 @@ const server = http.createServer((req, res) => {
 
 
 
-const privateKey = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/privkey.pem', 'utf8');
-const certificate = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/cert.pem', 'utf8');
-const ca = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/chain.pem', 'utf8');
 
-var serverSecure = https.createServer({
-    key: privateKey,
-    cert: certificate,
-    ca: ca
-}, app);
+if (local == true) {
+    console.log("Local Server");
+    const privateKey = fs.readFileSync('c:\\local\\etc\\key.pem', 'utf8');
+    const certificate = fs.readFileSync('c:\\local\\etc\\cert.pem', 'utf8');
+    serverSecure = https.createServer({
+        key: privateKey,
+        cert: certificate,
+    }, app);
+        
+} else {
+    const privateKey = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/privkey.pem', 'utf8');
+    const certificate = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/cert.pem', 'utf8');
+    const ca = fs.readFileSync('/etc/letsencrypt/live/flatland.earth/chain.pem', 'utf8');
+    var serverSecure = https.createServer({
+        key: privateKey,
+        cert: certificate,
+        ca: ca
+    }, app);
+    
+}
+
 
 
 server.listen(80, () => {

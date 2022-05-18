@@ -3,7 +3,7 @@
 */
 
 var flatlandConfig = {
-    server: "https://flatland.earth",
+    server: "https://flatland.hfk-bremen.de",
     land: 'default',
     updateIntervall: 20,
     spawnIntervall: 500d,

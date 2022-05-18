@@ -3,7 +3,7 @@
 */
 
 var flatlandConfig = {
-    server: "https://flatland.earth",
+    server: "https://flatland.hfk-bremen.de",
     land: 'duo',
     updateIntervall: 40,
     debug: true,

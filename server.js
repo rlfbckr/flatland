@@ -1,13 +1,13 @@
 /*
    F-L-A-T-L-A-N-D S-E-R-V-E-R
-   Ralf Baecker 2021
+   Ralf Baecker 2021    
 
    platform fro  collaborative generative practices
 
 */
 
 const local = 0; // run local
-var lands = ['default', 'atlantis', 'group1', 'group2', 'group3'];
+var lands = ['default'];
 
 const https = require('https');
 var http = require('http');

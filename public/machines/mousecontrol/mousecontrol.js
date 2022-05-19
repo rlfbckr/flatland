@@ -6,7 +6,7 @@ var flatlandConfig = {
     server: "https://flatland.hfk-bremen.de",
     land: 'default',
     updateIntervall: 20,
-    spawnIntervall: 500d,
+    spawnIntervall: 500,
     debug: false,
     clearscreen: true,
     backgroundcolor: [255, 255, 255],

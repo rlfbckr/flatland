@@ -1,6 +1,6 @@
 # install guide
 
-this shows how to do a basic installation of flatland (clint) on your local machine for developing machines and bots. 
+this shows how to do a basic installation of flatland (client) on your local machine for developing machines and bots. 
 
 * download zip or clone the repository of flatland
 ```bash

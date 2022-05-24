@@ -2,8 +2,8 @@
     "liveServer.settings.port": 5501,
     "liveServer.settings.https": {
       "enable": true,
-      "cert": "/mnt/c/system/openssl/localhost.pem",
-      "key": "/mnt/c/system/openssl/localhost.key",
+      "cert": "/home/ralf/local/openssl/localhost.pem",
+      "key": "/home/ralf/local/openssl/localhost.key",
       "passphrase": "1234test"
     }
   }

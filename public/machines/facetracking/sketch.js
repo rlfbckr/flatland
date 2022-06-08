@@ -104,8 +104,8 @@ function draw() {
     // Create a pink ellipse for the nose
     fill(213, 0, 143);
     let nose = pose['nose'];
-    nasex = map(nose.x, 0, 320, -width / 2, width / 2);
-    nasey = map(nose.y, 0, 240, -height / 2, height / 2);
+     nasex = map(nose.x, 0, 320, -width / 2, width / 2) ;
+    nasey =  map(nose.y, 0, 240, -height / 2, height / 2) ;
     if (show_video) {
       ellipse(map(nose.x, 0, 320, -width / 2, width / 2), map(nose.y, 0, 240, -height / 2, height / 2), 20, 20);
     }
